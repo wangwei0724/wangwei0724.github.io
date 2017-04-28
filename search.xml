@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[learning]]></title>
+      <url>%2F2017%2F04%2F28%2Flearning%2F</url>
+      <content type="text"></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[post]]></title>
       <url>%2F2017%2F04%2F10%2Fpost%2F</url>
       <content type="text"></content>
@@ -12,7 +19,7 @@
     <entry>
       <title><![CDATA[javascript继承方法]]></title>
       <url>%2F2017%2F04%2F07%2Finherit%2F</url>
-      <content type="text"><![CDATA[js中常用的继承方法有两种，一种是原型链继承，这是对象之间的继承，一般用prototype实现；第二种是类继承，这是构造函数直接的继承，一般用call和apply方法实现。我们可以将prototype看成是一个模板，所有新创建的对象都是这个模板的一个拷贝，严格来说也不算是拷贝，而是新创建的对象中有一个proto对象，这个对象等同于其构造函数的prototype（原型对象），参考下面例子： 12345var a= function()&#123; //定义属性和方法&#125;var b= new a();console.log(b.__proto__==a.prototype); js可以通过构造]]></content>
+      <content type="text"><![CDATA[继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。所以如果让原型对象等于另一个类型的实例，此时的原型对象就会包含一个指向另一个原型的指针，另一个原型中也包含着一个指向另一个构造函数的指针。如此层层推进，就构成了实例和原型之间的链条。 js中常用的继承方法有两种，一种是原型链继承，这是对象之间的继承，一般用prototype实现；第二种是类继承，这是构造函数直接的继承，一般用call和apply方法实现。我们可以将prototype看成是一个模板，所有新创建的对象都是这个模板的一个拷贝，严格来说也不算是拷贝，而是新创建的对象中有一个proto对象，这个对象等同于其构造函数的prototype（原型对象），参考下面例子： 12345var a= function()&#123; //定义属性和方法&#125;var b= new a();console.log(b.__proto__==a.prototype); js可以通过构造函数和原型链的方法来实现继承，其实刚刚的第二种方法类继承也是通过原型链的方法来实现的。]]></content>
     </entry>
 
     
