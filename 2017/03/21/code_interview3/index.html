@@ -1,0 +1,959 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="剑指offer javascript实现1.输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323
+解题思路：找到一种排序规则，然后让数组根据这个规则排序；给出数组中两个数字m、n，判断mn和nm的大小就可，在这里转化为字符串是一个很方便的方法。
+123456789101112f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剑指offer javascript实现">
+<meta property="og:url" content="https://wangwei0724.github.io/2017/03/21/code_interview3/index.html">
+<meta property="og:site_name" content="Wangwei's Blog">
+<meta property="og:description" content="剑指offer javascript实现1.输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323
+解题思路：找到一种排序规则，然后让数组根据这个规则排序；给出数组中两个数字m、n，判断mn和nm的大小就可，在这里转化为字符串是一个很方便的方法。
+123456789101112f">
+<meta property="og:updated_time" content="2017-06-04T08:18:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="剑指offer javascript实现">
+<meta name="twitter:description" content="剑指offer javascript实现1.输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323
+解题思路：找到一种排序规则，然后让数组根据这个规则排序；给出数组中两个数字m、n，判断mn和nm的大小就可，在这里转化为字符串是一个很方便的方法。
+123456789101112f">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wangwei0724.github.io/2017/03/21/code_interview3/"/>
+
+
+
+
+
+  <title> 剑指offer javascript实现 | Wangwei's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?82ed74efe101f728fcfee840529aba02";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangwei's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/21/code_interview3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bill Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/icon.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangwei's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                剑指offer javascript实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T21:53:08+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/剑指offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/code_interview3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/21/code_interview3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="剑指offer-javascript实现"><a href="#剑指offer-javascript实现" class="headerlink" title="剑指offer javascript实现"></a>剑指offer javascript实现</h2><p>1.输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323</p>
+<p>解题思路：找到一种排序规则，然后让数组根据这个规则排序；给出数组中两个数字m、n，判断mn和nm的大小就可，在这里转化为字符串是一个很方便的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function PrintMinNumber(numbers)&#123;</div><div class="line">    numbers.sort(function(num1,num2)&#123;</div><div class="line">      num1 = num1.toString();</div><div class="line">      num2 = num2.toString();</div><div class="line">      if(parseInt(num1+num2)&gt;parseInt(num2+num1))&#123;</div><div class="line">        return 1</div><div class="line">      &#125;else&#123;</div><div class="line">        return -1</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">    return numbers.join(&apos;&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.把只包含因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。</p>
+<p>解题思路：根据丑数的定义，任何一个丑数都应该是前面的丑数乘以2，3，5得到的，所以我们可以维持一个从小到大的有序数组，如果我们把每一个已经得到的丑数都乘以2、3、5，那么下一个丑数就是计算之后得到数字中的最小值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function GetUglyNumber_Solution(index)&#123;</div><div class="line">    if(index&lt;1)&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">    var p1=p2=p3=0;</div><div class="line">    var arr = [1];</div><div class="line">    for(var i=1;i&lt;index;i++)&#123;</div><div class="line">        result[i] = Math.min(result[p1]*2,result[p2]*3,result[p3]*5);</div><div class="line">        if(result[i]===result[p1]*2) p1++;</div><div class="line">        if(result[i]===result[p2]*3) p2++;</div><div class="line">        if(result[i]===result[p3]*5) p3++;</div><div class="line">    &#125;</div><div class="line">    return result[index-1];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.在一个字符串(1&lt;=字符串长度&lt;=10000，全部由大写字母组成)中找到第一个只出现一次的字符,并返回它的位置</p>
+<p>解题思路：构造一个哈希表，记录每个元素出现的次数。如果拿到每个字符就将其和之后的每个字符作对比，那每个字符就有可能和后面的O(n)个数作对比，所以时间复杂度应该是O(n<sup>2</sup>)。使用哈希表第一次遍历字符串，复杂度是O(n)，第二遍找位置复杂度还是O(n)，所以总体的复杂度是O(n)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function FirstNotRepeatingChar(str) &#123;</div><div class="line">    if(str.length==0) return -1;</div><div class="line">    var json=&#123;&#125;,result=null;</div><div class="line">    for(var i=0;i&lt;str.length;i++)&#123;</div><div class="line">        if(!json[str.charAt(i)])&#123;</div><div class="line">            json[str.charAt(i)]=1;</div><div class="line">        &#125;else&#123;</div><div class="line">            json[str.charAt(i)]++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    for(var j=0;j&lt;str.length;j++)&#123;</div><div class="line">        if(json[str.charAt(j)]==1)&#123;</div><div class="line">            result = j;</div><div class="line">            break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4.输入两个单向链表，找出它们的第一个公共结点。</p>
+<p>解题思路：因为是单向链表，所以从第一个相同的结点向后都是相同的。可以从每个链表的尾部开始往前比较，最后一个相同的结点就是我们要找的结点，所以把两个链表存到栈里就可以从栈尾开始比较；更简单的思路是先遍历链表得到链表长度，计算出长度的差值，让长度较大的链表先走上若干步，再开始同时遍历。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">function FindFirstCommonNode(pHead1, pHead2)&#123;</div><div class="line">    var node1= pHead1;</div><div class="line">    var node2= pHead2;</div><div class="line">    var arr1=[];</div><div class="line">    var arr2=[];</div><div class="line">    var result;</div><div class="line">    while(node1)&#123;</div><div class="line">        arr1.push(node1);</div><div class="line">        node1=node1.next;</div><div class="line">    &#125;</div><div class="line">    while(node2)&#123;</div><div class="line">        arr2.push(node2);</div><div class="line">        node2=node2.next;</div><div class="line">    &#125;</div><div class="line">    var length = Math.min(arr1.length,arr2.length);</div><div class="line">    var value = Math.abs(arr1.length-arr2.length);</div><div class="line">    if(arr1.length&gt;arr2.length)&#123;</div><div class="line">		for(var i=0;i&lt;length;i++)&#123;</div><div class="line">            if(arr1[i+value]==arr2[i])&#123;</div><div class="line">                result = arr2[i];</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        for(var i=0;i&lt;length;i++)&#123;</div><div class="line">            if(arr2[i+value]==arr1[i])&#123;</div><div class="line">                result = arr1[i];</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5.统计一个数字在排序数组中出现的次数。</p>
+<p>解题思路：主要要确定的是重复出现的数字的第一个和最后一个，所以基本思路就是用二分查找来找该数字第一次出现的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function GetNumberOfK(data, k)&#123;</div><div class="line">    if(data.length==0) return 0;</div><div class="line">    var high=data.length-1;</div><div class="line">    var low=0;</div><div class="line">    var count=0;</div><div class="line">    while(low&lt;=high)&#123;</div><div class="line">       mid = Math.floor((low+high)/2);</div><div class="line">       if(k&gt;=data[mid])&#123;</div><div class="line">           low = mid+1;</div><div class="line">       &#125;else&#123;</div><div class="line">           high = mid-1;</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    for(var i=mid;data[i]==k;i++)&#123;</div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line">    for(var j=mid-1;data[j]==k;j--)&#123;</div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line">    return count;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>6.输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。</p>
+<p>解题思路：如果一个树只有一个结点，那么他的深度为1，如果根节点只有左子树没有右子树，那么树的深度应该是其左子树加1；所以树的深度应该就是其左右子树深度较大值加1，基于这个思路就可以写递归了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function TreeDepth(pRoot)&#123;</div><div class="line">    if(pRoot === null) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    var left = pRoot.left,</div><div class="line">        right = pRoot.right;</div><div class="line">    return (TreeDepth(left)&gt;TreeDepth(right))?TreeDepth(left)+1:TreeDepth(right)+1; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7.输入一个递增排序的数组和一个数字S，在数组中查找两个数，是的他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的.</p>
+<p>解题思路：和相同的情况下，两个数的差值越大，乘积越小。所以选取两个指针，一个从数组的头部开始，一个从数组的尾部开始。如果两数的和相加大于给出来的和，则将尾部的指针向前移一个；如果小于就将前面的指针向后移动一个；相等则立即输出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function FindNumbersWithSum(array, sum)&#123;</div><div class="line">    if(array.length==0) return false;</div><div class="line">    var result = [];</div><div class="line">    var left =0;</div><div class="line">    var right=array.length;</div><div class="line">    while(left&lt;right)&#123;</div><div class="line">        var total=array[left]+array[right];</div><div class="line">        if(total==sum)&#123;</div><div class="line">            result=[array[left],array[right]]</div><div class="line">            break;</div><div class="line">        &#125;else if(total&lt;sum)&#123;</div><div class="line">            left++</div><div class="line">        &#125;else&#123;</div><div class="line">            right--</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>8.找出所有和为S的连续正数序列。</p>
+<p>解题思路：和上一题一样，我们先确立两个序列的最大值big和最小值small。因为一个序列至少有两个数字，所以small增加到(1+s)/2为止。计算small和big直接数字的和，如果和大于big，则将small后移；如果小于big，则将big后移；如果相等则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">function FindContinuousSequence(sum)&#123;</div><div class="line">    if(sum&lt;3) return false;</div><div class="line">    var start=1;</div><div class="line">    var end=2;</div><div class="line">    var result=[];</div><div class="line">    while(start&lt;(sum+1)/2)&#123;</div><div class="line">        var temp_sum=0;</div><div class="line">        for(var i=start;i&lt;=end;i++)&#123;</div><div class="line">            temp_sum=temp_sum+i;</div><div class="line">        &#125;</div><div class="line">        if(temp_sum==sum)&#123;</div><div class="line">           var arr = [];</div><div class="line">           for(var j=start;j&lt;=end;j++)&#123; </div><div class="line">             arr.push(j);</div><div class="line">           &#125; </div><div class="line">           result.push(arr);</div><div class="line">           start++;</div><div class="line">           end++;</div><div class="line">        &#125;else if(temp_sum&gt;sum)&#123;</div><div class="line">            start++</div><div class="line">        &#125;else&#123;</div><div class="line">            end++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>9.从扑克牌中随机抽取5张牌，判断是不是顺子，j为11，q为12，k为13，大小王可以看成任意数字。</p>
+<p>解题思路：其实只要判断数字是否重复，如果有重复肯定不行；其次判断最大和最小之差，如果超过4页肯定不行。其实主要还是把抽取纸牌的模型转化为数组，然后通过计数、排序等步骤实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function IsContinuous(numbers)&#123;</div><div class="line">    var numbers = numbers.sort();</div><div class="line">    for(var j=1;j&lt;numbers.length&amp;&amp;numbers[j]!=0;j++)&#123;</div><div class="line">       if(numbers[j]==numbers[j-1])&#123;</div><div class="line">           return false;</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    var max = -1;</div><div class="line">    var min = 14;</div><div class="line">    for (i = 0; i &lt; numbers.length; ++i) &#123;</div><div class="line">        if (numbers[i] &gt; max &amp;&amp; numbers[i] != 0) max = numbers[i];</div><div class="line">        if (numbers[i] &lt; min &amp;&amp; numbers[i] != 0) min = numbers[i];</div><div class="line">    &#125;</div><div class="line">    if (max - min &gt; 4)&#123;</div><div class="line">        return false;</div><div class="line">    &#125;else&#123;</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>10.在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是重复的数字2或者3。</p>
+<p>解题思路：第一想法是排序，但是排序的时间复杂度应该是O(nlogn),然后想到引入哈希表，这样就用了一个O(n)的内存为代价将时间变为O(n)。下面方法的时间复杂度是O(n)，空间为O(1)；遍历整个数组，到下标i的时候看看存储的数字m是不是等于i,如果不是就将再拿他和第m个数进行比较；若相等，则找到了一个重复的数字(该数字在下标i和m都出现了)；若不相等，就把第i个数字和第m个数字交换，将m放到属于他的位置，然后重复这个过程。虽然代码中有循环中的循环，但是每个数字最多两次交换就能找到自己的位置，所以时间复杂度是O(n)；由于在数组内部交换，所以空间复杂度为O(1)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function duplicate(numbers, duplication)&#123;</div><div class="line">    // write code here</div><div class="line">    if(numbers.length&lt;2)&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">    for(var i=0;i&lt;numbers.length;i++)&#123;</div><div class="line">        while(numbers[i]!=i)&#123;</div><div class="line">            if(numbers[i]==numbers[numbers[i]])&#123;</div><div class="line">                duplication[0]=numbers[i];</div><div class="line">                return true</div><div class="line">                </div><div class="line">            &#125;</div><div class="line">			var temp=numbers[i];</div><div class="line">            numbers[i]=numbers[temp];</div><div class="line">            numbers[temp]=temp;</div><div class="line">        &#125; </div><div class="line">    &#125;</div><div class="line">    return false</div><div class="line">    //这里要特别注意~找到任意重复的一个值并赋值到duplication[0]</div><div class="line">    //函数返回True/False</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/13/code_interview2/" rel="next" title="剑指offer javascript实现">
+                <i class="fa fa-chevron-left"></i> 剑指offer javascript实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/27/inherit/" rel="prev" title="javascript继承方法">
+                javascript继承方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/21/code_interview3/"
+           data-title="剑指offer javascript实现" data-url="https://wangwei0724.github.io/2017/03/21/code_interview3/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/icon.jpeg"
+               alt="Bill Wang" />
+          <p class="site-author-name" itemprop="name">Bill Wang</p>
+           
+              <p class="site-description motion-element" itemprop="description">一只热爱健身、酷爱球鞋的程序猿</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://wangwei0724.github.io/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2536236284/home?leftnav=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#剑指offer-javascript实现"><span class="nav-number">1.</span> <span class="nav-text">剑指offer javascript实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bill Wang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangwei0724"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

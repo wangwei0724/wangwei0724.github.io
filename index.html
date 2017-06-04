@@ -1158,6 +1158,361 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/21/code_interview3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bill Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/icon.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangwei's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/21/code_interview3/" itemprop="url">
+                  剑指offer javascript实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T21:53:08+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/剑指offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/code_interview3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/21/code_interview3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="剑指offer-javascript实现"><a href="#剑指offer-javascript实现" class="headerlink" title="剑指offer javascript实现"></a>剑指offer javascript实现</h2><p>1.输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323</p>
+<p>解题思路：找到一种排序规则，然后让数组根据这个规则排序；给出数组中两个数字m、n，判断mn和nm的大小就可，在这里转化为字符串是一个很方便的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function PrintMinNumber(numbers)&#123;</div><div class="line">    numbers.sort(function(num1,num2)&#123;</div><div class="line">      num1 = num1.toString();</div><div class="line">      num2 = num2.toString();</div><div class="line">      if(parseInt(num1+num2)&gt;parseInt(num2+num1))&#123;</div><div class="line">        return 1</div><div class="line">      &#125;else&#123;</div><div class="line">        return -1</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">    return numbers.join(&apos;&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.把只包含因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。</p>
+<p>解题思路：根据丑数的定义，任何一个丑数都应该是前面的丑数乘以2，3，5得到的，所以我们可以维持一个从小到大的有序数组，如果我们把每一个已经得到的丑数都乘以2、3、5，那么下一个丑数就是计算之后得到数字中的最小值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function GetUglyNumber_Solution(index)&#123;</div><div class="line">    if(index&lt;1)&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">    var p1=p2=p3=0;</div><div class="line">    var arr = [1];</div><div class="line">    for(var i=1;i&lt;index;i++)&#123;</div><div class="line">        result[i] = Math.min(result[p1]*2,result[p2]*3,result[p3]*5);</div><div class="line">        if(result[i]===result[p1]*2) p1++;</div><div class="line">        if(result[i]===result[p2]*3) p2++;</div><div class="line">        if(result[i]===result[p3]*5) p3++;</div><div class="line">    &#125;</div><div class="line">    return result[index-1];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.在一个字符串(1&lt;=字符串长度&lt;=10000，全部由大写字母组成)中找到第一个只出现一次的字符,并返回它的位置</p>
+<p>解题思路：构造一个哈希表，记录每个元素出现的次数。如果拿到每个字符就将其和之后的每个字符作对比，那每个字符就有可能和后面的O(n)个数作对比，所以时间复杂度应该是O(n<sup>2</sup>)。使用哈希表第一次遍历字符串，复杂度是O(n)，第二遍找位置复杂度还是O(n)，所以总体的复杂度是O(n)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function FirstNotRepeatingChar(str) &#123;</div><div class="line">    if(str.length==0) return -1;</div><div class="line">    var json=&#123;&#125;,result=null;</div><div class="line">    for(var i=0;i&lt;str.length;i++)&#123;</div><div class="line">        if(!json[str.charAt(i)])&#123;</div><div class="line">            json[str.charAt(i)]=1;</div><div class="line">        &#125;else&#123;</div><div class="line">            json[str.charAt(i)]++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    for(var j=0;j&lt;str.length;j++)&#123;</div><div class="line">        if(json[str.charAt(j)]==1)&#123;</div><div class="line">            result = j;</div><div class="line">            break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4.输入两个单向链表，找出它们的第一个公共结点。</p>
+<p>解题思路：因为是单向链表，所以从第一个相同的结点向后都是相同的。可以从每个链表的尾部开始往前比较，最后一个相同的结点就是我们要找的结点，所以把两个链表存到栈里就可以从栈尾开始比较；更简单的思路是先遍历链表得到链表长度，计算出长度的差值，让长度较大的链表先走上若干步，再开始同时遍历。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">function FindFirstCommonNode(pHead1, pHead2)&#123;</div><div class="line">    var node1= pHead1;</div><div class="line">    var node2= pHead2;</div><div class="line">    var arr1=[];</div><div class="line">    var arr2=[];</div><div class="line">    var result;</div><div class="line">    while(node1)&#123;</div><div class="line">        arr1.push(node1);</div><div class="line">        node1=node1.next;</div><div class="line">    &#125;</div><div class="line">    while(node2)&#123;</div><div class="line">        arr2.push(node2);</div><div class="line">        node2=node2.next;</div><div class="line">    &#125;</div><div class="line">    var length = Math.min(arr1.length,arr2.length);</div><div class="line">    var value = Math.abs(arr1.length-arr2.length);</div><div class="line">    if(arr1.length&gt;arr2.length)&#123;</div><div class="line">		for(var i=0;i&lt;length;i++)&#123;</div><div class="line">            if(arr1[i+value]==arr2[i])&#123;</div><div class="line">                result = arr2[i];</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        for(var i=0;i&lt;length;i++)&#123;</div><div class="line">            if(arr2[i+value]==arr1[i])&#123;</div><div class="line">                result = arr1[i];</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5.统计一个数字在排序数组中出现的次数。</p>
+<p>解题思路：主要要确定的是重复出现的数字的第一个和最后一个，所以基本思路就是用二分查找来找该数字第一次出现的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function GetNumberOfK(data, k)&#123;</div><div class="line">    if(data.length==0) return 0;</div><div class="line">    var high=data.length-1;</div><div class="line">    var low=0;</div><div class="line">    var count=0;</div><div class="line">    while(low&lt;=high)&#123;</div><div class="line">       mid = Math.floor((low+high)/2);</div><div class="line">       if(k&gt;=data[mid])&#123;</div><div class="line">           low = mid+1;</div><div class="line">       &#125;else&#123;</div><div class="line">           high = mid-1;</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    for(var i=mid;data[i]==k;i++)&#123;</div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line">    for(var j=mid-1;data[j]==k;j--)&#123;</div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line">    return count;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>6.输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。</p>
+<p>解题思路：如果一个树只有一个结点，那么他的深度为1，如果根节点只有左子树没有右子树，那么树的深度应该是其左子树加1；所以树的深度应该就是其左右子树深度较大值加1，基于这个思路就可以写递归了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function TreeDepth(pRoot)&#123;</div><div class="line">    if(pRoot === null) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    var left = pRoot.left,</div><div class="line">        right = pRoot.right;</div><div class="line">    return (TreeDepth(left)&gt;TreeDepth(right))?TreeDepth(left)+1:TreeDepth(right)+1; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7.输入一个递增排序的数组和一个数字S，在数组中查找两个数，是的他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的.</p>
+<p>解题思路：和相同的情况下，两个数的差值越大，乘积越小。所以选取两个指针，一个从数组的头部开始，一个从数组的尾部开始。如果两数的和相加大于给出来的和，则将尾部的指针向前移一个；如果小于就将前面的指针向后移动一个；相等则立即输出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function FindNumbersWithSum(array, sum)&#123;</div><div class="line">    if(array.length==0) return false;</div><div class="line">    var result = [];</div><div class="line">    var left =0;</div><div class="line">    var right=array.length;</div><div class="line">    while(left&lt;right)&#123;</div><div class="line">        var total=array[left]+array[right];</div><div class="line">        if(total==sum)&#123;</div><div class="line">            result=[array[left],array[right]]</div><div class="line">            break;</div><div class="line">        &#125;else if(total&lt;sum)&#123;</div><div class="line">            left++</div><div class="line">        &#125;else&#123;</div><div class="line">            right--</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>8.找出所有和为S的连续正数序列。</p>
+<p>解题思路：和上一题一样，我们先确立两个序列的最大值big和最小值small。因为一个序列至少有两个数字，所以small增加到(1+s)/2为止。计算small和big直接数字的和，如果和大于big，则将small后移；如果小于big，则将big后移；如果相等则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">function FindContinuousSequence(sum)&#123;</div><div class="line">    if(sum&lt;3) return false;</div><div class="line">    var start=1;</div><div class="line">    var end=2;</div><div class="line">    var result=[];</div><div class="line">    while(start&lt;(sum+1)/2)&#123;</div><div class="line">        var temp_sum=0;</div><div class="line">        for(var i=start;i&lt;=end;i++)&#123;</div><div class="line">            temp_sum=temp_sum+i;</div><div class="line">        &#125;</div><div class="line">        if(temp_sum==sum)&#123;</div><div class="line">           var arr = [];</div><div class="line">           for(var j=start;j&lt;=end;j++)&#123; </div><div class="line">             arr.push(j);</div><div class="line">           &#125; </div><div class="line">           result.push(arr);</div><div class="line">           start++;</div><div class="line">           end++;</div><div class="line">        &#125;else if(temp_sum&gt;sum)&#123;</div><div class="line">            start++</div><div class="line">        &#125;else&#123;</div><div class="line">            end++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>9.从扑克牌中随机抽取5张牌，判断是不是顺子，j为11，q为12，k为13，大小王可以看成任意数字。</p>
+<p>解题思路：其实只要判断数字是否重复，如果有重复肯定不行；其次判断最大和最小之差，如果超过4页肯定不行。其实主要还是把抽取纸牌的模型转化为数组，然后通过计数、排序等步骤实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function IsContinuous(numbers)&#123;</div><div class="line">    var numbers = numbers.sort();</div><div class="line">    for(var j=1;j&lt;numbers.length&amp;&amp;numbers[j]!=0;j++)&#123;</div><div class="line">       if(numbers[j]==numbers[j-1])&#123;</div><div class="line">           return false;</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    var max = -1;</div><div class="line">    var min = 14;</div><div class="line">    for (i = 0; i &lt; numbers.length; ++i) &#123;</div><div class="line">        if (numbers[i] &gt; max &amp;&amp; numbers[i] != 0) max = numbers[i];</div><div class="line">        if (numbers[i] &lt; min &amp;&amp; numbers[i] != 0) min = numbers[i];</div><div class="line">    &#125;</div><div class="line">    if (max - min &gt; 4)&#123;</div><div class="line">        return false;</div><div class="line">    &#125;else&#123;</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>10.在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是重复的数字2或者3。</p>
+<p>解题思路：第一想法是排序，但是排序的时间复杂度应该是O(nlogn),然后想到引入哈希表，这样就用了一个O(n)的内存为代价将时间变为O(n)。下面方法的时间复杂度是O(n)，空间为O(1)；遍历整个数组，到下标i的时候看看存储的数字m是不是等于i,如果不是就将再拿他和第m个数进行比较；若相等，则找到了一个重复的数字(该数字在下标i和m都出现了)；若不相等，就把第i个数字和第m个数字交换，将m放到属于他的位置，然后重复这个过程。虽然代码中有循环中的循环，但是每个数字最多两次交换就能找到自己的位置，所以时间复杂度是O(n)；由于在数组内部交换，所以空间复杂度为O(1)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function duplicate(numbers, duplication)&#123;</div><div class="line">    // write code here</div><div class="line">    if(numbers.length&lt;2)&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">    for(var i=0;i&lt;numbers.length;i++)&#123;</div><div class="line">        while(numbers[i]!=i)&#123;</div><div class="line">            if(numbers[i]==numbers[numbers[i]])&#123;</div><div class="line">                duplication[0]=numbers[i];</div><div class="line">                return true</div><div class="line">                </div><div class="line">            &#125;</div><div class="line">			var temp=numbers[i];</div><div class="line">            numbers[i]=numbers[temp];</div><div class="line">            numbers[temp]=temp;</div><div class="line">        &#125; </div><div class="line">    &#125;</div><div class="line">    return false</div><div class="line">    //这里要特别注意~找到任意重复的一个值并赋值到duplication[0]</div><div class="line">    //函数返回True/False</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/13/code_interview2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bill Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/icon.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangwei's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/13/code_interview2/" itemprop="url">
+                  剑指offer javascript实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-13T22:18:56+08:00">
+                2017-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/剑指offer/" itemprop="url" rel="index">
+                    <span itemprop="name">剑指offer</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/13/code_interview2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/13/code_interview2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="剑指offer-javascript实现"><a href="#剑指offer-javascript实现" class="headerlink" title="剑指offer javascript实现"></a>剑指offer javascript实现</h2><p>1.输入一个链表，输出该链表中倒数第k个结点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/*function ListNode(x)&#123;</div><div class="line">    this.val = x;</div><div class="line">    this.next = null;</div><div class="line">&#125;*/</div><div class="line">function FindKthToTail(head, k)&#123;</div><div class="line">    var current = head;</div><div class="line">    var count = 0;</div><div class="line">	while(current)&#123;//获取链表长度</div><div class="line">        current = current.next;</div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line">    if (count&lt;k) &#123;//参数有效性判断</div><div class="line">    	return null;</div><div class="line">    &#125;else&#123;//单向链表只能从头开始</div><div class="line">    	for (var i = 0; i &lt;count-k; i++) &#123;</div><div class="line">    		head=head.next;</div><div class="line">    	&#125;</div><div class="line">    	return head;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.输入一个链表，反转链表后，输出链表的所有元素。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/*function ListNode(x)&#123;</div><div class="line">    this.val = x;</div><div class="line">    this.next = null;</div><div class="line">&#125;*/</div><div class="line">function ReverseList(pHead)&#123;</div><div class="line">    if(!pHead)&#123;//条件判断</div><div class="line">    	return null;</div><div class="line">    &#125;</div><div class="line">    var node = pHead;</div><div class="line">    var node_next=null;//赋值null可保证头结点不是undefined</div><div class="line">    var temp;</div><div class="line">    while(node)&#123;</div><div class="line">    	temp = node.next;//保存当前节点的下一个节点</div><div class="line">    	node.next= node_next;//改变next指向，使之指向当前节点的前一个节点</div><div class="line">    	node_next=node;</div><div class="line">    	node=temp;//node变为当前节点的下一个节点，保证能遍历整个链表</div><div class="line">    &#125;</div><div class="line">    return node_next;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）</p>
+<p>解题思路：在元素入栈时判断该元素是否在此刻出栈，若入栈数组的最后一个元素和出栈数组的第一个元素不相等，那么肯定不能作为弹出序列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function IsPopOrder(pushV, popV)&#123;	</div><div class="line">	if(pushV.length==0)&#123;</div><div class="line">    	return true;</div><div class="line">	&#125;</div><div class="line">    var arr = [];</div><div class="line">    for(var i = 0;i&lt;pushV.length;i++)&#123;</div><div class="line">        arr.push(pushV[i]);//模拟入栈</div><div class="line">        //判断入栈数组的最后一个和出栈数组的第一个是否相等</div><div class="line">        while(arr.length&gt;0&amp;&amp;arr[arr.length-1]==popV[0])&#123;</div><div class="line">            arr.pop();//将该元素出栈</div><div class="line">            popV.shift();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (arr.length==0)&#123;</div><div class="line">        return true</div><div class="line">    &#125;else&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4.数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function MoreThanHalfNum_Solution(numbers)&#123;</div><div class="line">    var counts=&#123;&#125;;//存储每个元素出现的次数</div><div class="line">    var length = numbers.length;//为了在接下来遍历counts时不用每次都取一遍length，提高效率</div><div class="line">    for(var i=0;i&lt;numbers.length;i++)&#123;</div><div class="line">        var number = numbers[i];</div><div class="line">        if(!counts[number])&#123;</div><div class="line">            counts[number]=0;</div><div class="line">        &#125;</div><div class="line">        counts[number]++;</div><div class="line">    &#125;</div><div class="line">    for(var key in counts)&#123;</div><div class="line">        if(counts[key]&gt;length/2)&#123;</div><div class="line">            return key;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5.输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。</p>
+<p>解题思路：前序遍历的第一个元素永远是树的根节点，再找出中序遍历中根节点的位置，就可以确定该树的左子树和右子树；左子树其实也是二叉树，可以通过左子树的前序和中序继续重建，也就是说接下来的步骤是一个递归的过程。递归结束的条件就是前序遍历中的所有节点都被取出，也就是pre数组为空。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">/* function TreeNode(x) &#123;</div><div class="line">    this.val = x;</div><div class="line">    this.left = null;</div><div class="line">    this.right = null;</div><div class="line">&#125; */</div><div class="line">function reConstructBinaryTree(pre, vin)&#123;</div><div class="line">    if(!pre||pre.length==0)&#123;//初始条件判断以及递归结束条件判断</div><div class="line">       return false;</div><div class="line">    &#125;</div><div class="line">    var node =&#123;&#125;;</div><div class="line">    node.val=pre[0];</div><div class="line">    for(var i=0;i&lt;pre.length;i++)&#123;</div><div class="line">        if(vin[i]==node.val)&#123;</div><div class="line">            node.left = reConstructBinaryTree(pre.slice(1,i+1),vin.slice(0,i));</div><div class="line">            //解析左子树，传入参数分别为左子树的前序遍历和中序遍历</div><div class="line">            node.right = reConstructBinaryTree(pre.slice(i+1),vin.slice(i+1));</div><div class="line">            //解析右子树，传入参数分别为右子树的前序遍历和中序遍历</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return node;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    reConstructBinaryTree : reConstructBinaryTree</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>6.输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）</p>
+<p>解题思路：加入一个辅助栈，模拟一下入栈的顺序，如果入栈的元素刚好是出栈的栈顶数字，那么直接弹出；如果不是就压入辅助栈，如果不能按照该顺序将辅助栈中所有元素弹出，就说明该序列不是一个弹出序列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function IsPopOrder(pushV, popV)&#123;</div><div class="line">    var arr = [];</div><div class="line">    if(pushV.length==0)&#123;</div><div class="line">        return false</div><div class="line">    &#125;else&#123;</div><div class="line">      for (var i = 0; i &lt;pushV.length; i++) &#123;</div><div class="line">        arr.push(pushV[i]);</div><div class="line">        while(arr.length&gt;0&amp;&amp;arr[arr.length-1]==popV[0])&#123;</div><div class="line">          arr.pop();</div><div class="line">          popV.shift();</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    if (arr.length==0) &#123;</div><div class="line">      return true</div><div class="line">    &#125;else&#123;</div><div class="line">      return false</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7.从上往下打印出二叉树的每个节点，同层节点从左至右打印。</p>
+<p>每次打印一个结点时，如果该节点有子节点，就将该节点的子节点放入一个队列的末尾，接下来从队列的头部取出第一个节点，重复前面的打印操作。其实本质上就是广度优先遍历一个二叉树</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/* function TreeNode(x) &#123;</div><div class="line">    this.val = x;</div><div class="line">    this.left = null;</div><div class="line">    this.right = null;</div><div class="line">&#125; */</div><div class="line">function PrintFromTopToBottom(root)&#123;</div><div class="line">    var node = root;</div><div class="line">    var arr = [];</div><div class="line">    var queue = [];</div><div class="line">    if(!node)&#123;</div><div class="line">        return arr</div><div class="line">    &#125;</div><div class="line">    queue.push(node);</div><div class="line">    while(queue.length&gt;0)&#123;</div><div class="line">        node = queue.shift();</div><div class="line">        arr.push(node.val);</div><div class="line">        if(node.left)&#123;</div><div class="line">            queue.push(node.left);</div><div class="line">        &#125;</div><div class="line">        if(node.right)&#123;</div><div class="line">            queue.push(node.right);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>8.数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。</p>
+<p>解题思路：假设存在这个数字，既然出现次数超过数组的一般，也就意味着他出现的次数比其他所有数字出现的次数加起来都要多，所以可以遍历数组的时候保存两个值，一个是数组中的元素值，一个是次数（初始值为1）。遍历到下一个数字时，如果和前一个数字相等，次数加1；如果不等，次数减1；如果次数为0，更新元素值，次数重置为1.最后一次将次数重置的1的就是我们要找的。之前的步骤都是建立在这个数字存在的条件下，所以找出来这个元素需要判断一下他在数组中出现的次数是不是超过数组长度的一半。</p>
+<p>时间复杂度：这样的话只是遍历了两遍数组，时间复杂度应该是O(n)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">function MoreThanHalfNum_Solution(numbers)&#123;</div><div class="line">    var num=numbers[0];</div><div class="line">    var times=1;</div><div class="line">    var length=0;</div><div class="line">    for(var i=1;i&lt;numbers.length;i++)&#123;</div><div class="line">        if(num==numbers[i])&#123;</div><div class="line">            times++;</div><div class="line">        &#125;else if(times==0)&#123;</div><div class="line">            num=numbers[i];</div><div class="line">            times=1;</div><div class="line">        &#125;else&#123;</div><div class="line">            times--;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    for(var j=0;j&lt;numbers.length;j++)&#123;</div><div class="line">        if(num==numbers[j])&#123;</div><div class="line">            length++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if(2*length&gt;numbers.length)&#123;</div><div class="line">        return num;</div><div class="line">    &#125;else&#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>9.输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4</p>
+<p>解题思路：构造一个长度为k的数组，将n个整数一个一个输出，如果数组未满，向数组里添加元素；如果数组满了，取出数组中最大值和带插入的数字比较，若最大值较大则用带插入的数字替换最大值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function GetLeastNumbers_Solution(input, k)&#123;</div><div class="line">    if(k&gt;input.length)&#123;</div><div class="line">        return false</div><div class="line">    &#125;</div><div class="line">    var arr = [];</div><div class="line">    for(var i=0;i&lt;input.length;i++)&#123;</div><div class="line">        if(arr.length&lt;k)&#123;</div><div class="line">            arr.push(input[i]);</div><div class="line">        &#125;else&#123;</div><div class="line">			arr = arr.sort();</div><div class="line">			//和数组中最大值进行比较</div><div class="line">            if(arr[k-1]&gt;input[i])&#123;</div><div class="line">               arr.pop(); </div><div class="line">               arr.push(input[i]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr.sort();</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>10.输入一个只包含整数的数组，数组中一个或连续多个整数构成一个子数组，求所有子数组和的最大值。</p>
+<p>解题思路：从头到尾累加数组，如果遇到相加之后的和为负数，则可以把该数之前的数字放弃了；如果整个数组全为负数，则取最大值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function FindGreatestSumOfSubArray(array)&#123;</div><div class="line">  if (array.length === 0) return 0;</div><div class="line">  var max = array[0];</div><div class="line">  var temp = array[0];</div><div class="line">  for (var i = 1; i &lt; array.length; i++) &#123;</div><div class="line">    temp = temp &gt; 0 ? temp + array[i] : array[i];</div><div class="line">    max = max &gt; temp ? max : temp;</div><div class="line">  &#125;</div><div class="line">  return max</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/07/code_interview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1366,7 +1721,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
