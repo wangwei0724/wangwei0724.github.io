@@ -314,7 +314,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/05/06/post/">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/05/27/construct/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bill Wang">
@@ -336,8 +336,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/05/06/post/" itemprop="url">
-                  post
+                <a class="post-title-link" href="/2017/05/27/construct/" itemprop="url">
+                  javascript中对象封装
                 </a>
               
             
@@ -353,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-06T20:38:38+08:00">
-                2017-05-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-27T23:38:44+08:00">
+                2017-05-27
               </time>
             
 
@@ -364,6 +364,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript学习/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -372,8 +394,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/05/06/post/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/06/post/" itemprop="commentCount"></span>
+                <a href="/2017/05/27/construct/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/27/construct/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -401,7 +423,178 @@
       
         
           
+            <h1 id="javascript中对象创建方法"><a href="#javascript中对象创建方法" class="headerlink" title="javascript中对象创建方法"></a>javascript中对象创建方法</h1><p>我们知道，JS是面向对象的。谈到面向对象，就不可避免的要涉及类的概念。不同于java这些强类型语言都有固定的定义类的语法，JS的能使用各种方法实现类和对象的封装。总结了目前想到的几种，后期有补充会继续更新：</p>
+<h2 id="1-工厂函数"><a href="#1-工厂函数" class="headerlink" title="1.工厂函数"></a>1.工厂函数</h2><p>工厂函数是一个返回特定对象的函数；每次调用这个函数都会生成一个新的对象，所以每个对象用的都有自己的方法版本（比如下面的showinfo），但其实所有对象都是共享的一个方法；所以这里可以进行优化,可以在工厂函数外定义该对象的方法，这样就只需要生成一遍对象方法。其次，工厂函数只解决了对象的创建问题，没能解决对象的识别问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">   return temp;//函数最后返回对象</div><div class="line">&#125;</div><div class="line">var person1=createPerson(&apos;wang&apos;,23);</div><div class="line">var person2=createPerson(&quot;he&quot;,25);</div><div class="line">person1.showInfo();</div><div class="line">person2.showInfo();</div></pre></td></tr></table></figure>
+<blockquote>
+<p>优化方法:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=showInfo;</div><div class="line">   return temp;</div><div class="line">&#125;</div><div class="line">function showInfo()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-构造函数"><a href="#2-构造函数" class="headerlink" title="2.构造函数"></a>2.构造函数</h2><p>构造函数是指构造一个函数对象，每次需要用是需要先实例化。不过很显然，每次实例化一个对象都会创建自己的showInfo函数版本。这个问题同样可以和工厂函数采取一样的方法，将showInfo直接在person外定义。这种优化方法虽然能带来一些便利，但还是滋生了别的问题，比如showInfo是一个全局函数，但是一个全局函数只能被某个对象使用，显得有点名不符其实；更严重的是，如果定义了很多个全局函数，那这个自定义的引用类型就丝毫没有封装性了。好在这些问题可以通过原型模式解决。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function Person(name,age)&#123;</div><div class="line">   this.name=name;</div><div class="line">   this.age=age;</div><div class="line">   this.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line">var person1=new Person(&apos;wang&apos;,23);</div><div class="line">var person2=new Person(&quot;he&quot;,25);</div><div class="line">person1.showInfo();</div><div class="line">person2.showInfo();</div></pre></td></tr></table></figure>
+<h2 id="3-原型方法"><a href="#3-原型方法" class="headerlink" title="3.原型方法"></a>3.原型方法</h2><p>该方式利用了对象的prototype属性，可把它看成创建新对象所依赖的原型。这里，用空构造函数来设置类名。然后把所有的方法和属性都直接赋予prototype属性。原型方法其实还有一个特点，我们给实例化出来的对象添加属性，当我们使用该属性时，搜索首先会是在这个在这个实例本身搜索，如果搜索不到，会从原型上搜索，直到得到结果。所以若实例和原型中有属性或方法重名，实例中的属性会屏蔽原型中的属性。</p>
+<p>原型方式只能直接赋值，而不能通过给构造函数传递参数初始化属性的值。在用这种方式时，会遇到两个非常讨厌的问题。第一问题是采用这种方式必须创建每个对象后才能改变属性的默认值。而不能在创建每个对象时都会直接有自己所需要的属性值。这点很讨厌。第二个问题在于属性所指的是对象的时候。函数共享不会出现任何问题，但是对象共享却会出现问题（如下文的hobbies）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function Person()&#123;</div><div class="line">&#125;</div><div class="line">Person.prototype.name=&quot;wang&quot;;</div><div class="line">Person.prototype.age=23;</div><div class="line">Person.prototype.hobbies=new Array(&quot;basketball&quot;,&quot;shoes&quot;);</div><div class="line">Person.prototype.showInfo=function()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age);</div><div class="line">&#125;</div><div class="line">var person1=new Person();</div><div class="line">var person2=new Person();</div><div class="line">person1.hobbies.push(&quot;code&quot;);</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div></pre></td></tr></table></figure>
+<h2 id="4-构造函数-原型方式"><a href="#4-构造函数-原型方式" class="headerlink" title="4.构造函数+原型方式"></a>4.构造函数+原型方式</h2><p>这种方式的思想是将上两种思想结合一下，用构造函数定义对象的所有属性（包括普通属性和指向对象的属性），用原型方式定义对象的方法。这样每个实例都会有一份属于自己的实力属性的副本，但同时又共享着对方法的引用，极大地节省了内存，可谓是集两家之长。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function Person(name,age)&#123;</div><div class="line">   this.name=name;</div><div class="line">   this.age=age;</div><div class="line">   this.hobbies=new Array(&quot;basketball&quot;,&quot;shoes&quot;);</div><div class="line">&#125;</div><div class="line">Person.prototype.showInfo=function()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">&#125;</div><div class="line">var person1=new Person(&apos;wang&apos;,23);</div><div class="line">var person2=new Person(&quot;he&quot;,25);</div><div class="line">person1.hobbies.push(&quot;code&quot;);</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div><div class="line">console.log(person2.hobbies);//输出&quot;basketball,shoes&quot;</div></pre></td></tr></table></figure>
+<h2 id="5-动态原型模式"><a href="#5-动态原型模式" class="headerlink" title="5.动态原型模式"></a>5.动态原型模式</h2><p> 这种方法在if处判断了是否初次运行构造函数。初次运行时，this指向的实例对象并没有showInfo这个方法，因此会进入if方法体内进行原型方法的定义。第二次运行时，this指向的实例对象的原型上已经有了showInfo方法，就不会进行二次构造，避免了原型方法的重复定义。除此之外，如果一个方法没有初始化，那代表所有属性和方法都没有初始化，所以只需要对其中一个方法进行判断就好。</p>
+<p>其实一开始也没能发现这种方法比上一种方法的好处，然后查阅发现这是为了解决有其他OO语言开发经验人的困惑，他们对独立开的构造函数和原型感到很困惑，动态原型就可以将所有信息都封装在函数中了。顺便说一句，这种模式产生的对象，可以用instanceof来确定它的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function person(name,age)&#123;</div><div class="line">  this.name=name;</div><div class="line">  this.age= age;</div><div class="line">  if (typeof this.showInfo==&apos;undefined&apos;) &#123;</div><div class="line">    person.prototype.showInfo=function()&#123;</div><div class="line">      return this.name+&apos; is &apos;+this.age;</div><div class="line">    &#125; </div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">var person1 = new person(&apos;wang&apos;,23);</div><div class="line">console.log(person1.showInfo());//wang is 23</div></pre></td></tr></table></figure>
+<hr>
+<p>update at 2017.04.09</p>
+<h2 id="6-寄生构造函数"><a href="#6-寄生构造函数" class="headerlink" title="6.寄生构造函数"></a>6.寄生构造函数</h2><p> 先不解释这种方法的，先看一个例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;   </div><div class="line">    var person = &#123;&#125;;  </div><div class="line">    person.name = name;</div><div class="line">    person.age = age; </div><div class="line">    person.showInfo = function()&#123;  </div><div class="line">        return this.name+&apos; is &apos;+this.age;</div><div class="line">    &#125;;  </div><div class="line">    return person;  </div><div class="line">&#125;   </div><div class="line">var person1 = new createPerson(&quot;wang&quot;,23);  </div><div class="line">console.log(person1.showInfo());//wang is 23</div></pre></td></tr></table></figure>
+<p>我自己在学习的时候不够仔细，刚接触这种方法时觉得这不就是工厂函数方法吗？在函数中创建一个新的对象，最后将对象当做返回值，直接看来工厂函数也是这么做的。那么在看一下下一个例子(此例子网上直接拷贝，非原创)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function SpecialArray()&#123;</div><div class="line">    var values = new Array();</div><div class="line">    values.push.apply(values, arguments);</div><div class="line">    values.toPipedString = function()&#123;</div><div class="line">        return this.join(&quot;|&quot;);</div><div class="line">    &#125;</div><div class="line">    return values;</div><div class="line">&#125;</div><div class="line">var a = new SpecialArray(2,6,8);</div><div class="line">a.toPipedString();//2|6|8</div></pre></td></tr></table></figure>
+<p>确实工厂构造方法和寄生构造方法没有本质区别，区别就在实例化的时候，工厂函数直接用了函数返回的对象，而寄生方法用了new关键字。new关键字会先新建一个空对象，这个对象会继承该函数的原型，最后this会绑定到新的对象上。所以这里的toPipedString方法会在原型上，也就是说普通的array也可以用toPipedString方法。总结一下就是寄生构造方法可以js原生的构造函数增加一些新的方法。</p>
+<p>这种方法返回的独享和构造函数或构造函数原型之间没什么关系，构造函数产生的对象和构造函数外部创建的对象没什么不同，也就是说不能通过instanceof来确定其对象类型，基于这一点，个人建议还是不要用这种方法了。</p>
+<h2 id="7-稳妥构造函数模式"><a href="#7-稳妥构造函数模式" class="headerlink" title="7.稳妥构造函数模式"></a>7.稳妥构造函数模式</h2><p>稳妥对象指的是没有公共属性和方法，看下面的代码可以知道，构造过程中没有引用this，生成实例的时候也没有用new方法，只有showInfo方法可以访问到name和age值，并且无论接下来的代码如何给person1加属性，name和age两个值也是不可能改变的。稳妥构造函数模式提供的这种安全性，使得他非常适合在某些安全的环境（可惜没有实战使用过。。。汗）。<br>其实个人觉得稳妥构造和工厂还是有点像，都是返回一个对象，不过看下面的例子，可以很直观的说明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;  </div><div class="line">    var person = new Object();   </div><div class="line">    person.showInfo = function()&#123;  </div><div class="line">        console.log(name+&apos; is &apos;+age);</div><div class="line">    &#125;;   </div><div class="line">    return person;  </div><div class="line">&#125;   </div><div class="line">var person1 = createPerson(&apos;wangwei&apos;,23);  </div><div class="line">person1.showInfo();  //wangwei is 23</div><div class="line">console.log(person1.name);//undefined </div><div class="line">person1.name = &apos;wangxiaowei&apos;;</div><div class="line">console.log(person1.name);//wangxiaowei</div><div class="line">person1.showInfo();  //wangwei is 23</div><div class="line"></div><div class="line">//---------以上为稳妥构造，下面是工厂函数构造------------</div><div class="line"></div><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">   return temp;//函数最后返回对象</div><div class="line">&#125;</div><div class="line">var person1=createPerson(&apos;wang&apos;,23);</div><div class="line">person1.name=&apos;wangxiaowei&apos;;</div><div class="line">person1.showInfo();//wangxiaowei is 23</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/05/27/interview_tencent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bill Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/icon.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangwei's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
             
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/27/interview_tencent/" itemprop="url">
+                  腾讯笔试后知后觉
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-27T23:38:44+08:00">
+                2017-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/27/interview_tencent/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/27/interview_tencent/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="笔试题目"><a href="#笔试题目" class="headerlink" title="笔试题目"></a>笔试题目</h2><blockquote>
+<p>如下示例：<br> 1：0种分解方法；<br> 2：0种分解方法；<br> 3=2+1 1种分解方法；<br> 4=3+1 =2+1+1 2种分解方法；<br> 5=4+1 =3+2 =3+1+1 =2+2+1 =2+1+1+1 5种分解方法；<br> 6=5+1 =4+2 =4+1+1 =3+2+1 =3+1+1+1 =2+2+1+1= 2+1+1+1+1 共七种分解方法；<br> 以此类推，求整数n共有几种分解方法。（如输入2，输出0）</p>
+</blockquote>
+<h2 id="题目解读"><a href="#题目解读" class="headerlink" title="题目解读"></a>题目解读</h2><p>  题目中所示的分解方法其实是将一个大整数n分解成m个数相加，但m个数不能是完全相同的。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p> 很可惜在笔试时间内没能做出来这道题，当时的思路是如果按照手写分解方法，总是将上一种分解方法的一个数拆开，所以最后一种分解方法永远是2+1+1+…(n-2个1)，所以倒数第二种分解方法就是将最后一种方法中的两个1或者1和2组合起来，即2+2+1+1…(n-4个1)或3+1+1+1..(n-3个1)。但一直没能用代码实现。</p>
+<p> 笔试结束后稍稍改变了一下思路，如果能先将该数的所有分解方法计算出来，再计算出所有加数完全相同的分解方法数，就能求得题目所要的分解方法次数。基于这个思路，问题的关键就在如何求得n的所有分解方法count1以及加数相同的分解方法count2。 </p>
+<p> 柿子挑软的捏，先解决简单的问题，先求出count2。这个问题可以转换一下思路，如果n可以由i个m相加得到，那么m和i都是n的因数，所以这个问题就转化为求整数n的因数问题，这就只需要遍历从1到n<sup>1/2</sup>，假设得出结果为x。如果n是一个完全平方数，那2x-1，反之为2x。  </p>
+<p> 接下来要求出count1。既然要求出所有的输出组合，那就意味一定会有一个遍历所有组合的过程，并且这个遍历一定是按照某种顺序的，所以关键问题在如何从第一种分解方法遍历到最后一种分解方法。先看一个例子：</p>
+<blockquote>
+<p>3=1+1+1 =1+2 =2+1 =3  </p>
+</blockquote>
+<p> 这个过程中的1+2和2+1本质上只是一种分解方法，所以应当先规定一个次序，定义了次序，剩下的就是让程序按照这个顺序执行下去。所以我们让数组从小到大出现，也就是说后一个加数永远大于等于前一个加数，这样就不会出现上面2+1的情况了，这样一来就能保证输出的唯一性了。</p>
+<p> 剩下的就是递归了，先遍历1开头的组合，当1开头的组合遍历完成时，就开始遍历2开头的，以2开头的分解方法中就没有加数1了，最小的加数为2；可以看出，第一个数最大的情况是取小于等于n/2的最大整数，如果第一个数大于n/2,而后一个数又必须大于n/2,那么两数相加一定会大于你，递归的思路如下：</p>
+<blockquote>
+<p>n=1+后续组合<br>n=2+后续组合<br>…<br>…<br>n=n/2(前取整)+p   (n为偶数时p=n/2,n为奇数时p=(n+1)/2)</p>
+</blockquote>
+<p>思路差不多到这里，接下来是代码实现了。递归函数为total(n,start)，n为需要分解的整数，start表示当前遍历的第一个数字，start主要是为了去重复的。</p>
+<h3 id="javascript实现"><a href="#javascript实现" class="headerlink" title="javascript实现"></a>javascript实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">//从1开始，后面加的每个数都大于等于1</div><div class="line">//1计算完了从2开始，一直遍历到比number/2小的最大整数</div><div class="line">var count1 = 0;//记录可能性总数（包括所有加数完全一样）</div><div class="line">var count2 = 0;//计算所有加数都相等情况的总数</div><div class="line">function list(number)&#123;</div><div class="line">  if (parseInt(number)==NaN) &#123;//判断输入是否有效</div><div class="line">    return false;</div><div class="line">  &#125;</div><div class="line">  if (number&lt;3) &#123;//n小于3时直接输出0</div><div class="line">    return 0;</div><div class="line">  &#125;</div><div class="line">  total(number,1);//从第一个加数为1开始执行递归</div><div class="line">  for(var m = 1;m&lt;=parseInt(Math.sqrt(number));m++)&#123;</div><div class="line">    if((number/m)==(parseInt(number/m)))&#123;//判断n的因数个数</div><div class="line">      count2++;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  console.log(count1,count2);//调试，可忽略</div><div class="line">  //判断n是否是完全平方数，若为完全平方，则根号n被多减去了一次，需要加上</div><div class="line">  if((parseInt(Math.sqrt(number)))==Math.sqrt(number))&#123;</div><div class="line">    return count1-count2*2+2;</div><div class="line">  &#125;else&#123;</div><div class="line">    return count1-count2*2+1;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">&#125;</div><div class="line">function total(number,start)&#123;</div><div class="line">  for(var i = start;i&lt;=number/2;i++)&#123;</div><div class="line">    total(number-i,i);//从i开始可排除重复</div><div class="line">    count1++;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">console.log(list(9));//结果为27</div></pre></td></tr></table></figure>
+
           
         
       
@@ -441,7 +634,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/04/28/learning/">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/05/06/summary_ikea/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bill Wang">
@@ -463,8 +656,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/28/learning/" itemprop="url">
-                  learning
+                <a class="post-title-link" href="/2017/05/06/summary_ikea/" itemprop="url">
+                  项目总结
                 </a>
               
             
@@ -480,8 +673,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T09:29:25+08:00">
-                2017-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-06T20:38:38+08:00">
+                2017-05-06
               </time>
             
 
@@ -491,6 +684,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目总结/" itemprop="url" rel="index">
+                    <span itemprop="name">项目总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -499,8 +714,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/28/learning/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/28/learning/" itemprop="commentCount"></span>
+                <a href="/2017/05/06/summary_ikea/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/06/summary_ikea/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -528,7 +743,201 @@
       
         
           
+            <h1 id="ikea移动端项目总结"><a href="#ikea移动端项目总结" class="headerlink" title="ikea移动端项目总结"></a>ikea移动端项目总结</h1><p>差不多花了大半个月和同学同事一起完成了ikea项目的一期。虽然不是第一次做移动端前端开发，但是以前做的大都是微信公众号的开发，这次是要兼容两者；以前一般为图省事会直接引入meat标签固定页面宽度为750px，这次尝试使用rem的兼容模式。</p>
+<h2 id="移动设备兼容"><a href="#移动设备兼容" class="headerlink" title="移动设备兼容"></a>移动设备兼容</h2><p>考虑到这一点的时候，情不自禁去百度了一下，刚好看到一篇很<a href="http://www.codeceo.com/article/font-size-web-design.html" target="_blank" rel="external">合适的博客</a>，于是心中立马有了思路，既然rem是以html的font-size为基准，那么如果整张网页都是以rem为单位，在不同的屏幕下就只是相当于按屏幕大小的比例缩放了，效果应该还挺不错，至少是ui同事最希望看到的，于是立刻上手。</p>
+<p>在这里借鉴了上段提到的博客中网易的做法。使用rem布局结合在html上根据不同分辨率设置不同font-size有很多不好解决的麻烦，网易的解决发发是页面上html的font-size不是预先通过媒介查询在css里定义好的，而是通过js计算出来的，所以当分辨率发生变化时，html的font-size就会变，不过这得在你调整分辨率后，刷新页面才能看得到效果。计算规则的话，就和ui图的尺寸有关了，拿我自己的来说，我拿到的ui图的横向分辨率是750px，为了计算方便，取一个100px的font-size为参照，那么body元素的宽度就可以设置为width: 7.5rem，于是html的font-size=deviceWidth / 7.5，这样如果标注题上给的width是100px，写css时直接写1rem就可以了，所以在js代码中加了如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + &apos;px&apos;;</div></pre></td></tr></table></figure>
+<p>其实早知道事情不会这么一帆风顺，由于平时习惯性的会将js代码放在html末尾引入，所以果然出了幺蛾子，在html的dom结构加载完成时才加载了这句js，然后这句js改变了html的font-size的大小，所以这就不可避免的导致了页面上每个元素的大小都发生了改变，也就是说页面刷新出来会看到一次很明显的回流，简直是一种差到爆的用户体验。苦思冥想了十分钟，暂时想到一种不是很完美的解决办法，在css中添加了一段媒体查询，对主流的几种手机屏幕先判断一下并且设定html的font-size，由于css在head部位引入，所以可以一定程度上解决问题，下面是媒体查询代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@media screen and (min-width:0px) and (max-width:321px)&#123;html&#123;font-size:42.67px&#125;&#125;</div><div class="line">@media screen and (min-width:322px) and (max-width:376px)&#123;html&#123;font-size:50px&#125;&#125;</div><div class="line">@media screen and (min-width:377px) and (max-width:415px)&#123;html&#123;font-size:55.2px&#125;&#125;</div><div class="line">@media screen and (min-width:416px) and (max-width:501px)&#123;html&#123;font-size:66.7px&#125;&#125;</div><div class="line">@media screen and (min-width:502px) and (max-width:639px)&#123;html&#123;font-size:85.2px&#125;&#125;</div><div class="line">@media screen and (min-width:640px) and (max-width:719px)&#123;html&#123;font-size:95.8px&#125;&#125;</div></pre></td></tr></table></figure>
+<p>说这种方法时一定程度上解决主要是因为查询的边界是按照几款iphone的屏幕尺寸定的，如果遇到不在这几种边界周围的安卓手机，应该还是会有回流现象发生，接下来还要再想一些完美的解决方案。</p>
+<h2 id="微信和普通浏览器的兼容"><a href="#微信和普通浏览器的兼容" class="headerlink" title="微信和普通浏览器的兼容"></a>微信和普通浏览器的兼容</h2><p>做这个兼容主要是在某些情况能使用微信js-sdk的api方法。举个例子，在微信微信浏览器中上传图片时，如果不使用微信提供的图片上传方法，那么安卓手机只能选择拍照（无法从相册中选择），所以这里先判断了是否是微信浏览器，如果是则使用微信提供的api，如果不是则老老实实input上传。下面是判断的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function is_weixn()&#123;  </div><div class="line">    var ua = navigator.userAgent.toLowerCase();  </div><div class="line">    if(ua.match(/MicroMessenger/i)==&quot;micromessenger&quot;) &#123;  </div><div class="line">        return true;  </div><div class="line">    &#125; else &#123;  </div><div class="line">        return false;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="新的尝试"><a href="#新的尝试" class="headerlink" title="新的尝试"></a>新的尝试</h2><p>1.之前写项目总是习惯用jquery，jquery也确实提供了丰富的dom操作方法，但一位师兄提醒我，如果使用原生的js来书写dom操作，会让你对dom树的结构，节点的选取、操作有更深刻的理解。所以这全程使用的原生的js，个人感觉虽然略显冗余，但是在这之后做牛客网上关于dom操作的题确实顺手了好多，也发现了自己对原生js的很多方法使用的还是不够熟练。</p>
+<p>2.以前遇到一些稍复杂一点的功能总是喜欢找一些轻量级的插件来辅助实现，这次也算是时间充裕，而且自己也立了flag不引入任何插件和框架，所以就自己动手完成了一些功能。主要有两个，一个是轮播，一个是上拉加载；这两个小插件在<a href="https://github.com/wangwei0724/plugs" target="_blank" rel="external">我的github</a>上都有。</p>
+<p>轮播主要要实现的是图片滑动和无限滚动。图片滑动是将需要轮播的图片横向放在一个div中，如果需要轮播n张图片，此div的宽度就为n+2张图片的宽度之和（比如有5张100px的图需要轮播，那么该div的宽度就是700px，理由在后面），给改div加上overflow：hidden的样式，让其多出来部分不显示出来；并且给div加上定位属性，然后通过调整div的left值改变图片位置以达到轮播效果；无限滚动其实是在第一张图前面额外添加一张最后一张图，最后一张图后面额外添加第一张图，这也解释了为什么上文div的宽度要设置为n+2张图片的宽度之和。还是拿五张图来举个例子，假设五张图的代号分别为1、2、3、4、5，添加完图片后的排列就是5123451，这样图片滑动到5时，再向后就会滑到最后一张1，此时将div的left值设置为第一张1的left值，就可以完成瞬间拉回第一张图，视觉上不会察觉。</p>
+<p>上拉加载的主要思路是检测onscroll判断height，如果scrollpHeight=clientHeigh+scrollTop就向后端发起ajax请求，也就是说计算滚动条位置加上网页可视高度，如果等于页面高度时触发加载函数。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/04/28/bfc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bill Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/icon.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangwei's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
             
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/28/bfc/" itemprop="url">
+                  BFC引发的思考
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T09:29:25+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css学习/" itemprop="url" rel="index">
+                    <span itemprop="name">css学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/28/bfc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/28/bfc/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>BFC这个东西说常见的话你可能不觉得，但是你肯定会常用，也许你在用的时候也没想到BFC这东西。网上也有很多写这些东西的文章，但是自己写一遍印象更深一点。</p>
+<p>首先我们看看w3c对BFC是怎么定义的:</p>
+<p><a href="http://www.w3.org/TR/CSS2/visuren.html#block-formatting" target="_blank" rel="external">http://www.w3.org/TR/CSS2/visuren.html#block-formatting</a></p>
+<p>Floats, absolutely positioned elements, block containers (such as inline-blocks, table-cells, and table-captions) that are not block boxes, and block boxes with ‘overflow’ other than ‘visible’ (except when that value has been propagated to the viewport) establish new block formatting contexts for their contents.</p>
+<p>In a block formatting context, boxes are laid out one after the other, vertically, beginning at the top of a containing block. The vertical distance between two sibling boxes is determined by the ‘margin’ properties. Vertical margins between adjacent block-level boxes in a block formatting context collapse.</p>
+<p>In a block formatting context, each box’s left outer edge touches the left edge of the containing block (for right-to-left formatting, right edges touch). This is true even in the presence of floats (although a box’s line boxes may shrink due to the floats), unless the box establishes a new block formatting context (in which case the box itself may become narrower due to the floats).</p>
+<p>用谷歌翻译(笑..我是谷歌脑残粉)过来就是：</p>
+<p>浮动元素和绝对定位元素，非块级盒子的块级容器（例如 inline-blocks, table-cells, 和 table-captions），以及overflow值不为“visiable”的块级盒子，都会为他们的内容创建新的块级格式化上下文。</p>
+<p>在一个块级格式化上下文里，盒子从包含块的顶端开始垂直地一个接一个地排列，两个盒子之间的垂直的间隙是由他们的margin 值所决定的。两个相邻的块级盒子的垂直外边距会发生叠加。</p>
+<p>在块级格式化上下文中，每一个盒子的左外边缘（margin-left）会触碰到容器的左边缘(border-left)（对于从右到左的格式来说，则触碰到右边缘），即使存在浮动也是如此，除非这个盒子创建一个新的块级格式化上下文。</p>
+<p>从上面我们还可找出几个几个比较重要的概念东西，比如:boxe , block formatting context。毫无疑问BFC就是block formatting context的缩写，中文就是“块级格式化上下文”的意思。我们在那个w3c那个页面发现还有其他inline formatting context，所以我们可以看看 formatting context是个什么东西：</p>
+<p>Formatting context是W3C CSS2.1规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
+<p>最常见的Formatting context有Block fomatting context(简称BFC)和Inline formatting context(简称IFC)。CSS2.1 中只有BFC和IFC, CSS3中还增加了GFC和FFC.</p>
+<p>至于那个box还要讲吗？嗯，还是回顾一下：</p>
+<p>Box是CSS布局的对象和基本单位， 直观点来说，就是一个页面是由很多个Box(即boxes)组成的。元素的类型和display属性，决定了这个Box的类型。 不同类型的Box， 会参与不同的Formatting context(一个决定如何渲染文档的容器)，因此Box内的元素会以不同的方式渲染。常见的盒子类型</p>
+<p>block-level box: display属性为block, list-item, table的元素，会生成block-level box。并且参与block fomatting context。 inline-level box: display属性为inline, inline-block, inline-table的元素，会生成inline-level box。并且参与inline formatting context。 妈蛋四级刚刚飘过的孩子看这点英文不容易啊，有时候我们总觉的书上或者官方的概念定义的东西不利于我们理解，所以我们更喜欢有些老师通俗的讲解。这里我们也通俗的理解一下：</p>
+<p>BFC就是“块级格式化上下文”的意思，创建了 BFC的元素就是一个独立的盒子，不过只有Block-level box可以参与创建BFC， 它规定了内部的Block-level Box如何布局，并且与这个独立盒子里的布局不受外部影响，当然它也不会影响到外面的元素。</p>
+<p>BFC有一下特性：</p>
+<p>内部的Box会在垂直方向，从顶部开始一个接一个地放置。<br>Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生叠加<br>每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。<br>BFC的区域不会与float box叠加。<br>BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然。<br>计算BFC的高度时，浮动元素也参与计算。<br>好了What这一阶段就到这了，基本的概念我们都要了解清楚，不清楚的多看几遍，是在不清楚的我猜是我写的不够通俗易解。</p>
+<p>接下来我一般会考虑Why，即为什么会出现这个问题，为什么要这样用，为什么会出现这些效果。但是这里就不写了，因为我也不知道写啥(哭…求高手指点)…</p>
+<p>到最后我就是考虑How了，不用说你也知道了，就是怎么解决这些问题，这些知识点该怎么用，还有没有其他的方法..</p>
+<p>那么我们该怎么使用BFC呢，如何触发BFC呢？：</p>
+<p>float 除了none以外的值<br>overflow 除了visible 以外的值（hidden，auto，scroll ）<br>display (table-cell，table-caption，inline-block, flex, inline-flex)<br>position值为（absolute，fixed）<br>fieldset元素<br>在以上的情况里可以创建BFC。</p>
+<p>接下我们看下怎么运用BFC，在哪些场景可以用到BFC.</p>
+<p>1.解决margin叠加问题 三P每个p之间的距离为50px，发生了外边距叠加。 要解决这个叠加问题即让每个P之间是100px，我们可以新建一个BFC，怎么建呢？可以给p元素添加一个父元素，让它触发BFC。如下:</p>
+<p>2.用于布局</p>
+<p>从图中我们会发现上面BFC的第三个特性，就是元素的左外边距会触碰到包含块容器的做外边框，就算存在浮动也会如此。那么我们如何解决这个问题呢？看上面BFC第四个特性，就是BFC不会与浮动盒子叠加，那么我们是不是可以创建一个新的BFC来解决这个问题呢？来看看：</p>
+<p>发现我们用overflow:hidden触发main元素的BFC之后，效果立马出现了,一个两栏布局就这么妥妥的搞掂…</p>
+<p>3.用于清除浮动，计算BFC高度.</p>
+<p>因为上面第六个特性提到计算BFC高度时，浮动元素也会参与计算，我们先看一个例子：</p>
+<p>我们发现由于里面两个子元素浮动的关系，两个box已经脱离了父元素的包含块，父元素高度已经塌陷，我们需要让父元素包含两个box子元素，这样计算高度时，两个浮动子元素就会参与，所以我们要闭合浮动，触发父元素的BFC，我们还是继续用overflow:hidden来看看效果吧：</p>
+<p>怎么样，效果还很明显的吗，当然清理(闭合)浮动还有很多方法，大家可以看看一丝大神写的那些年我们一起清除过的浮动。 好了写到这里基本才不多了，BFC是个很奇怪的东西，她一直隐式的存在我们的css样式里，但是我们要记住BFC是页面元素里一个独立存在作用块，它不影响它外面的布局，外面的元素也不会影响到BFC里面的布局。</p>
+
           
         
       
@@ -678,218 +1087,37 @@
         
           
             <h1 id="javascript-继承"><a href="#javascript-继承" class="headerlink" title="javascript 继承"></a>javascript 继承</h1><p>继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。</p>
-<h2 id="1-原型链方法"><a href="#1-原型链方法" class="headerlink" title="1.原型链方法"></a>1.原型链方法</h2><blockquote>
-<p>原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。所以如果让原型对象等于另一个类型的实例，此时的原型对象就会包含一个指向另一个原型的指针，另一个原型中也包含着一个指向另一个构造函数的指针。如此层层推进，就构成了实例和原型之间的链条。下面提供一个原型链继承的例子。</p>
-</blockquote>
+<h2 id="1-原型链方法"><a href="#1-原型链方法" class="headerlink" title="1.原型链方法"></a>1.原型链方法</h2><p>原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。所以如果让原型对象等于另一个类型的实例，此时的原型对象就会包含一个指向另一个原型的指针，另一个原型中也包含着一个指向另一个构造函数的指针。如此层层推进，就构成了实例和原型之间的链条。下面提供一个原型链继承的例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function SuperType()&#123;</div><div class="line">  this.property = true;</div><div class="line">&#125;</div><div class="line">SuperType.prototype.getValue=function()&#123;</div><div class="line">  return this.property;</div><div class="line">&#125;</div><div class="line">function SubType()&#123;</div><div class="line">  this.subProperty = true;</div><div class="line">&#125;</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">SuperType.prototype.getSubValue=function()&#123;</div><div class="line">  return this.subProperty;</div><div class="line">&#125;</div><div class="line">var instance = new SubType();</div><div class="line">console.log(instance.getValue());//true</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上面代码其实定义了两个类型：SuperType和SubType，每个类型都属于自己的一个属性和方法。主要在于SubType继承了SuperType，继承的方法是通过创建SuperType的实例并将实例赋给了SubType.prototype，本质上是重写了原型对象。所以结果就是instance指向SubType的原型，SubType又指向了SuperType的原型。getValue方法仍然在SuperType.prototype中，但是property则位于SubType.prototype中。这是因为property是一个实例属性，而getValue是一个原型方法。不过在这里要注意instance.constructer现在是指向SuperType，这是因为SubType.prototype中的constructer被重写了。</p>
 <p>使用原型链方法其实有一个小的注意点，我们在创建原型方法时不能使用对象字面量，因为这种方法会重写原型链,如下例：</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function SuperType()&#123;</div><div class="line">  this.property = true;</div><div class="line">&#125;</div><div class="line">SuperType.prototype.getValue=function()&#123;</div><div class="line">  return this.property;</div><div class="line">&#125;</div><div class="line">function SubType()&#123;</div><div class="line">  this.subProperty = true;</div><div class="line">&#125;</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">SuperType.prototype=&#123;</div><div class="line">  getSubValue:function()&#123;</div><div class="line">     return this.subProperty;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">var instance = new SubType();</div><div class="line">console.log(instance.getValue());//error</div></pre></td></tr></table></figure>
-<blockquote>
 <p>除此之外，原型链继承也还是有一些问题的，最主要的是包含引用类型值的原型，如下例：</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function Super()&#123;</div><div class="line">    this.val = 1;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">function Sub()&#123;</div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line">Sub.prototype = new Super();    var sub1 = new Sub();</div><div class="line">var sub2 = new Sub();</div><div class="line">sub1.val = 2;</div><div class="line">sub1.arr.push(2);</div><div class="line">alert(sub1.val);    // 2</div><div class="line">alert(sub2.val);    // 1</div><div class="line"></div><div class="line">alert(sub1.arr);    // 1, 2</div><div class="line">alert(sub2.arr);    // 1, 2</div></pre></td></tr></table></figure>
-<blockquote>
 <p>原型链的第二个问题就是在创建子类的实例时，不能向超类型的构造函数中传递参数。其实按照我的理解应该说是无法再不影响实例对象的情况下，给超类型的构造函数传递参数，所以平时我一般不考虑用这种方法。</p>
-</blockquote>
-<h2 id="2-借用构造函数"><a href="#2-借用构造函数" class="headerlink" title="2.借用构造函数"></a>2.借用构造函数</h2><blockquote>
-<p>这种方法的思想很简单，就是直接在子类构造函数的内部调用超类构造函数，用call或者apply来改变this的指向，其实就是在我们未来要新创建的Sub实例的环境下调用Super的方法，如下例：</p>
-</blockquote>
+<h2 id="2-借用构造函数"><a href="#2-借用构造函数" class="headerlink" title="2.借用构造函数"></a>2.借用构造函数</h2><p>这种方法的思想很简单，就是直接在子类构造函数的内部调用超类构造函数，用call或者apply来改变this的指向，其实就是在我们未来要新创建的Sub实例的环境下调用Super的方法，如下例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line"></div><div class="line">    this.fun = function()&#123;</div><div class="line">        // ...</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function Sub(val)&#123;</div><div class="line">    Super.call(this, val);</div><div class="line">    this.name = &apos;sub&apos;;      </div><div class="line">&#125;</div><div class="line">var sub1 = new Sub(1);</div><div class="line">var sub2 = new Sub(2);</div><div class="line">sub1.arr.push(2);</div><div class="line">console.log(sub1.val);    // 1</div><div class="line">console.log(sub2.val);    // 2</div><div class="line">console.log(sub2.name);    // sub</div><div class="line">console.log(sub1.arr);    // 1, 2</div><div class="line">console.log(sub2.arr);    // 1</div><div class="line">console.log(sub1.fun === sub2.fun);   // false</div></pre></td></tr></table></figure>
-<blockquote>
 <p>从上面的例子可以看出来，借用构造函数是可以向超类构造函数中传递参数的，如例子中的name属性。为了确保Super构造函数不会重写子类的属性，可以在调用超类构造函数后，再添加相应的子类。</p>
 <p>借用构造函数也是有一定问题的，所有的方法都是在构造函数中定义，函数复用就无从谈起了。而且超类原型中定义的方法对子类是不可见的，结果所有的类型就只能使用构造函数模式了，所以平时我也是很少用这个方法。</p>
-</blockquote>
-<h2 id="3-组合继承"><a href="#3-组合继承" class="headerlink" title="3.组合继承"></a>3.组合继承</h2><blockquote>
-<p>组合继承指的是将原型链和借用构造函数组合到一起的一种继承模式，主要思路就是使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承。这样既通过在原型上定义方法实现了函数复用，又能保证每个实例都有自己的属性。</p>
-</blockquote>
+<h2 id="3-组合继承"><a href="#3-组合继承" class="headerlink" title="3.组合继承"></a>3.组合继承</h2><p>组合继承指的是将原型链和借用构造函数组合到一起的一种继承模式，主要思路就是使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承。这样既通过在原型上定义方法实现了函数复用，又能保证每个实例都有自己的属性。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    // 只在此处声明基本属性和引用属性</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">//  在此处声明函数，把实例函数都放在原型对象上，以实现函数复用</div><div class="line">Super.prototype.fun = function()&#123;&#125;;</div><div class="line">//Super.prototype.fun3...</div><div class="line">function Sub(val,name)&#123;</div><div class="line">    Super.call(this,val); </div><div class="line">    this.name = name; </div><div class="line">&#125;</div><div class="line">Sub.prototype.sayName = function()&#123;</div><div class="line">	 console.log(this.name);</div><div class="line">&#125;</div><div class="line">Sub.prototype = new Super(); </div><div class="line"></div><div class="line">var sub1 = new Sub(1);</div><div class="line">var sub2 = new Sub(2);</div><div class="line">alert(sub1.fun === sub2.fun);   // true</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上面的例子中，Super构造函数有arr和value两个属性，原型上有fun这个方法。Sub构造函数在调用Super构造函数时传入了val参数，然后有定义了属于自己的name属性。最后将Super的实例赋给Sub的原型，然后在该新原型上定义了sayName方法。这样一来可以让两个不同的Sub实例既拥有属于自己的属性，又可以使用相同的方法。</p>
 <p>但是这种方法也不是完全没有缺点的，可以看出在这个过程中超类使用了两次，一次在创建子类原型的时候，另一次是在子类构造函数内部，但是使用过程中，子类的实例属性会屏蔽原型属性，也就是说某些原型属性其实是用不上的，这造成了内存的浪费。</p>
-</blockquote>
-<h2 id="4-原型式继承"><a href="#4-原型式继承" class="headerlink" title="4.原型式继承"></a>4.原型式继承</h2><blockquote>
-<p>这种方法其实没有严格意义上的构造函数，主体思想是基于已有的对象并借助原型构建新的对象。</p>
-</blockquote>
+<h2 id="4-原型式继承"><a href="#4-原型式继承" class="headerlink" title="4.原型式继承"></a>4.原型式继承</h2><p>这种方法其实没有严格意义上的构造函数，主体思想是基于已有的对象并借助原型构建新的对象。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function inherit(obj)&#123;</div><div class="line">  function temp()&#123;&#125;;</div><div class="line">  temp.prototype = obj;</div><div class="line">  return new temp;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>参照上述主题思想，在inherit函数内部先创建一个临时的构造函数，然后将传入的对象作为这个构造函数的原型，最后返回这个临时原型的新实例。本质上讲，这就是对传入对象进行了一次浅复制。这种方法一开始是一个叫克劳克福德的老外提出来的，现在es5中有Object.create()方法，这个方法接收两个参数，一个用作新对象原型的对象，一个为新对象增加额外属性属性的对象。在只传入一个参数的情况下，上述inherit方法和Object.create()方法效果一样。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var person = &#123;</div><div class="line">  name:&apos;wang&apos;,</div><div class="line">  hobbies:[&apos;shoes&apos;,&apos;ballgames&apos;]</div><div class="line">&#125;;</div><div class="line">var person1 = Object.create(person);</div><div class="line">person1.hobbies.push(&apos;code&apos;);</div><div class="line">console.log(person.hobbies);//&apos;shoes&apos;,&apos;ballgames&apos;,&apos;code&apos;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>包含引用类型值的属性始终会共享相应的值，就像原型模式一样。如果不想构建创造函数，只是想让一个对象和另一个对象保持类似的情况下，可以考虑使用原型书继承，别的情况下不建议使用。</p>
-</blockquote>
 <hr>
 <p>update at 2017.04.15</p>
-<h2 id="5-寄生式继承"><a href="#5-寄生式继承" class="headerlink" title="5.寄生式继承"></a>5.寄生式继承</h2><blockquote>
-<p>这种方法的思路和寄生构造函数和工厂模式类似，就是创建一个仅用于封装继承过程的函数，该函数的内部以别的方法来增强对象，最后再返回对象。</p>
-</blockquote>
+<h2 id="5-寄生式继承"><a href="#5-寄生式继承" class="headerlink" title="5.寄生式继承"></a>5.寄生式继承</h2><p>这种方法的思路和寄生构造函数和工厂模式类似，就是创建一个仅用于封装继承过程的函数，该函数的内部以别的方法来增强对象，最后再返回对象。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function createAnother(original)&#123;</div><div class="line">  var clone = Object.create(original);</div><div class="line">  clone.show = function()&#123;</div><div class="line">     //</div><div class="line">  &#125;</div><div class="line">  return clone;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上述例子中，接收的参宿就是将要作为新对象基础的对象，最后再给clone对象增加新的方法。新的对象不仅有original所有的属性和方法，还有自己的show方法。使用这种继承方法给对象添加函数，会由于不能做到函数复用而降低效率。</p>
-</blockquote>
-<h2 id="6-寄生组合式继承"><a href="#6-寄生组合式继承" class="headerlink" title="6.寄生组合式继承"></a>6.寄生组合式继承</h2><blockquote>
-<p>之前说过组合继承中超类使用了两次从而造成内存浪费，浪费的原因主要是在原型和实例中都会出现重名的属性。寄生组合式继承是通过借用构造函数来继承属性，通过原型链的混成形式来继承方法；基本思路就是不必为了指定子类型的原型而调用超类的构造函数，我们所需要的其实就是一个超类型的副本。简单说就是使用寄生式来继承超类的原型，再将结果给子类的原型。</p>
-</blockquote>
+<h2 id="6-寄生组合式继承"><a href="#6-寄生组合式继承" class="headerlink" title="6.寄生组合式继承"></a>6.寄生组合式继承</h2><p>之前说过组合继承中超类使用了两次从而造成内存浪费，浪费的原因主要是在原型和实例中都会出现重名的属性。寄生组合式继承是通过借用构造函数来继承属性，通过原型链的混成形式来继承方法；基本思路就是不必为了指定子类型的原型而调用超类的构造函数，我们所需要的其实就是一个超类型的副本。简单说就是使用寄生式来继承超类的原型，再将结果给子类的原型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function inheritPrototype(Sub,Super)&#123;</div><div class="line">  var prototype = Object.create(Super.prototype);//创建对象</div><div class="line">  prototype.constructor = Sub;//增强对象</div><div class="line">  Sub.prototype = prototype;//指定对象</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上述函数接收两个参数，分别为子类构造函数和超类构造函数。函数内部第一步常见超类原型的一个副本，第二步为创建的副本添加constructer属性，弥补一下因为重写原型而失去的默认的constructer属性，第三部将新创建的对象赋给子类的原型。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">Super.prototype.fun = function()&#123;</div><div class="line">	 alert(this.val);</div><div class="line">&#125;;</div><div class="line">function Sub(val,name)&#123;</div><div class="line">    Super.call(this，val); </div><div class="line">    this.name = name; </div><div class="line">&#125;</div><div class="line">inheritPrototype(Sub,Super);</div><div class="line">Sub.prototype.sayName = function()&#123;</div><div class="line">	 console.log(this.name);</div><div class="line">&#125;</div><div class="line"></div><div class="line">var sub1 = new Sub(1,&apos;wang&apos;);</div><div class="line">var sub2 = new Sub(2,&apos;wei&apos;);</div><div class="line">alert(sub1.fun === sub2.fun);   // true</div><div class="line">sub1.sayName();//wang</div><div class="line">sub1.arr.push(111);</div><div class="line">console.log(sub1.arr);//[1,111]</div><div class="line">console.log(sub2.arr);//[1]</div></pre></td></tr></table></figure>
-<blockquote>
 <p>相对于组合继承，这个方法最大的优势就在于他只调用了一席Super构造函数，因此避免了在Sub.prototype上创建不必要的属性，与系统是，原型链还能保持不变，简直完美！！！</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/04/05/new-page/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Bill Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/icon.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wangwei's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/05/new-page/" itemprop="url">
-                  腾讯笔试后知后觉
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-05T20:01:53+08:00">
-                2017-04-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/05/new-page/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/05/new-page/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="笔试题目"><a href="#笔试题目" class="headerlink" title="笔试题目"></a>笔试题目</h2><blockquote>
-<p>如下示例：<br> 1：0种分解方法；<br> 2：0种分解方法；<br> 3=2+1 1种分解方法；<br> 4=3+1 =2+1+1 2种分解方法；<br> 5=4+1 =3+2 =3+1+1 =2+2+1 =2+1+1+1 5种分解方法；<br> 6=5+1 =4+2 =4+1+1 =3+2+1 =3+1+1+1 =2+2+1+1= 2+1+1+1+1 共七种分解方法；<br> 以此类推，求整数n共有几种分解方法。（如输入2，输出0）</p>
-</blockquote>
-<h2 id="题目解读"><a href="#题目解读" class="headerlink" title="题目解读"></a>题目解读</h2><blockquote>
-<p> 题目中所示的分解方法其实是将一个大整数n分解成m个数相加，但m个数不能是完全相同的。</p>
-</blockquote>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><blockquote>
-<p>很可惜在笔试时间内没能做出来这道题，当时的思路是如果按照手写分解方法，总是将上一种分解方法的一个数拆开，所以最后一种分解方法永远是2+1+1+…(n-2个1)，所以倒数第二种分解方法就是将最后一种方法中的两个1或者1和2组合起来，即2+2+1+1…(n-4个1)或3+1+1+1..(n-3个1)。但一直没能用代码实现。</p>
-<p>笔试结束后稍稍改变了一下思路，如果能先将该数的所有分解方法计算出来，再计算出所有加数完全相同的分解方法数，就能求得题目所要的分解方法次数。基于这个思路，问题的关键就在如何求得n的所有分解方法count1以及加数相同的分解方法count2。 </p>
-<p>柿子挑软的捏，先解决简单的问题，先求出count2。这个问题可以转换一下思路，如果n可以由i个m相加得到，那么m和i都是n的因数，所以这个问题就转化为求整数n的因数问题，这就只需要遍历从1到n<sup>1/2</sup>，假设得出结果为x。如果n是一个完全平方数，那2x-1，反之为2x。  </p>
-<p>接下来要求出count1。既然要求出所有的输出组合，那就意味一定会有一个遍历所有组合的过程，并且这个遍历一定是按照某种顺序的，所以关键问题在如何从第一种分解方法遍历到最后一种分解方法。先看一个例子：</p>
-<blockquote>
-<p>3=1+1+1 =1+2 =2+1 =3  </p>
-</blockquote>
-<p>这个过程中的1+2和2+1本质上只是一种分解方法，所以应当先规定一个次序，定义了次序，剩下的就是让程序按照这个顺序执行下去。所以我们让数组从小到大出现，也就是说后一个加数永远大于等于前一个加数，这样就不会出现上面2+1的情况了，这样一来就能保证输出的唯一性了。</p>
-<p>剩下的就是递归了，先遍历1开头的组合，当1开头的组合遍历完成时，就开始遍历2开头的，以2开头的分解方法中就没有加数1了，最小的加数为2；可以看出，第一个数最大的情况是取小于等于n/2的最大整数，如果第一个数大于n/2,而后一个数又必须大于n/2,那么两数相加一定会大于你，递归的思路如下：</p>
-<blockquote>
-<p>n=1+后续组合<br>n=2+后续组合<br>…<br>…<br>n=n/2(前取整)+p   (n为偶数时p=n/2,n为奇数时p=(n+1)/2)</p>
-</blockquote>
-<p>思路差不多到这里，接下来是代码实现了。递归函数为total(n,start)，n为需要分解的整数，start表示当前遍历的第一个数字，start主要是为了去重复的。</p>
-</blockquote>
-<h3 id="javascript实现"><a href="#javascript实现" class="headerlink" title="javascript实现"></a>javascript实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">//从1开始，后面加的每个数都大于等于1</div><div class="line">//1计算完了从2开始，一直遍历到比number/2小的最大整数</div><div class="line">var count1 = 0;//记录可能性总数（包括所有加数完全一样）</div><div class="line">var count2 = 0;//计算所有加数都相等情况的总数</div><div class="line">function list(number)&#123;</div><div class="line">  if (parseInt(number)==NaN) &#123;//判断输入是否有效</div><div class="line">    return false;</div><div class="line">  &#125;</div><div class="line">  if (number&lt;3) &#123;//n小于3时直接输出0</div><div class="line">    return 0;</div><div class="line">  &#125;</div><div class="line">  total(number,1);//从第一个加数为1开始执行递归</div><div class="line">  for(var m = 1;m&lt;=parseInt(Math.sqrt(number));m++)&#123;</div><div class="line">    if((number/m)==(parseInt(number/m)))&#123;//判断n的因数个数</div><div class="line">      count2++;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  console.log(count1,count2);//调试，可忽略</div><div class="line">  //判断n是否是完全平方数，若为完全平方，则根号n被多减去了一次，需要加上</div><div class="line">  if((parseInt(Math.sqrt(number)))==Math.sqrt(number))&#123;</div><div class="line">    return count1-count2*2+2;</div><div class="line">  &#125;else&#123;</div><div class="line">    return count1-count2*2+1;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">&#125;</div><div class="line">function total(number,start)&#123;</div><div class="line">  for(var i = start;i&lt;=number/2;i++)&#123;</div><div class="line">    total(number-i,i);//从i开始可排除重复</div><div class="line">    count1++;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">console.log(list(9));//结果为27</div></pre></td></tr></table></figure>
 
           
         
@@ -930,7 +1158,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/07/my-new-post/">
+    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/06/code_interview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bill Wang">
@@ -952,200 +1180,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/07/my-new-post/" itemprop="url">
-                  javascript中对象封装
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-07T20:42:44+08:00">
-                2017-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript学习/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/07/my-new-post/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/my-new-post/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="javascript中对象创建方法"><a href="#javascript中对象创建方法" class="headerlink" title="javascript中对象创建方法"></a>javascript中对象创建方法</h1><p>我们知道，JS是面向对象的。谈到面向对象，就不可避免的要涉及类的概念。不同于java这些强类型语言都有固定的定义类的语法，JS的能使用各种方法实现类和对象的封装。总结了目前想到的几种，后期有补充会继续更新：</p>
-<h2 id="1-工厂函数"><a href="#1-工厂函数" class="headerlink" title="1.工厂函数"></a>1.工厂函数</h2><blockquote>
-<p>工厂函数是一个返回特定对象的函数；每次调用这个函数都会生成一个新的对象，所以每个对象用的都有自己的方法版本（比如下面的showinfo），但其实所有对象都是共享的一个方法；所以这里可以进行优化,可以在工厂函数外定义该对象的方法，这样就只需要生成一遍对象方法。其次，工厂函数只解决了对象的创建问题，没能解决对象的识别问题。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">   return temp;//函数最后返回对象</div><div class="line">&#125;</div><div class="line">var person1=createPerson(&apos;wang&apos;,23);</div><div class="line">var person2=createPerson(&quot;he&quot;,25);</div><div class="line">person1.showInfo();</div><div class="line">person2.showInfo();</div></pre></td></tr></table></figure>
-<blockquote>
-<p>优化方法:</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=showInfo;</div><div class="line">   return temp;</div><div class="line">&#125;</div><div class="line">function showInfo()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="2-构造函数"><a href="#2-构造函数" class="headerlink" title="2.构造函数"></a>2.构造函数</h2><blockquote>
-<p>构造函数是指构造一个函数对象，每次需要用是需要先实例化。不过很显然，每次实例化一个对象都会创建自己的showInfo函数版本。这个问题同样可以和工厂函数采取一样的方法，将showInfo直接在person外定义。这种优化方法虽然能带来一些便利，但还是滋生了别的问题，比如showInfo是一个全局函数，但是一个全局函数只能被某个对象使用，显得有点名不符其实；更严重的是，如果定义了很多个全局函数，那这个自定义的引用类型就丝毫没有封装性了。好在这些问题可以通过原型模式解决。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function Person(name,age)&#123;</div><div class="line">   this.name=name;</div><div class="line">   this.age=age;</div><div class="line">   this.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line">var person1=new Person(&apos;wang&apos;,23);</div><div class="line">var person2=new Person(&quot;he&quot;,25);</div><div class="line">person1.showInfo();</div><div class="line">person2.showInfo();</div></pre></td></tr></table></figure>
-<h2 id="3-原型方法"><a href="#3-原型方法" class="headerlink" title="3.原型方法"></a>3.原型方法</h2><blockquote>
-<p>该方式利用了对象的prototype属性，可把它看成创建新对象所依赖的原型。这里，用空构造函数来设置类名。然后把所有的方法和属性都直接赋予prototype属性。原型方法其实还有一个特点，我们给实例化出来的对象添加属性，当我们使用该属性时，搜索首先会是在这个在这个实例本身搜索，如果搜索不到，会从原型上搜索，直到得到结果。所以若实例和原型中有属性或方法重名，实例中的属性会屏蔽原型中的属性。</p>
-<p>原型方式只能直接赋值，而不能通过给构造函数传递参数初始化属性的值。在用这种方式时，会遇到两个非常讨厌的问题。第一问题是采用这种方式必须创建每个对象后才能改变属性的默认值。而不能在创建每个对象时都会直接有自己所需要的属性值。这点很讨厌。第二个问题在于属性所指的是对象的时候。函数共享不会出现任何问题，但是对象共享却会出现问题（如下文的hobbies）。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function Person()&#123;</div><div class="line">&#125;</div><div class="line">Person.prototype.name=&quot;wang&quot;;</div><div class="line">Person.prototype.age=23;</div><div class="line">Person.prototype.hobbies=new Array(&quot;basketball&quot;,&quot;shoes&quot;);</div><div class="line">Person.prototype.showInfo=function()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age);</div><div class="line">&#125;</div><div class="line">var person1=new Person();</div><div class="line">var person2=new Person();</div><div class="line">person1.hobbies.push(&quot;code&quot;);</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div></pre></td></tr></table></figure>
-<h2 id="4-构造函数-原型方式"><a href="#4-构造函数-原型方式" class="headerlink" title="4.构造函数+原型方式"></a>4.构造函数+原型方式</h2><blockquote>
-<p>这种方式的思想是将上两种思想结合一下，用构造函数定义对象的所有属性（包括普通属性和指向对象的属性），用原型方式定义对象的方法。这样每个实例都会有一份属于自己的实力属性的副本，但同时又共享着对方法的引用，极大地节省了内存，可谓是集两家之长。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function Person(name,age)&#123;</div><div class="line">   this.name=name;</div><div class="line">   this.age=age;</div><div class="line">   this.hobbies=new Array(&quot;basketball&quot;,&quot;shoes&quot;);</div><div class="line">&#125;</div><div class="line">Person.prototype.showInfo=function()&#123;</div><div class="line">   console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">&#125;</div><div class="line">var person1=new Person(&apos;wang&apos;,23);</div><div class="line">var person2=new Person(&quot;he&quot;,25);</div><div class="line">person1.hobbies.push(&quot;code&quot;);</div><div class="line">console.log(person1.hobbies);//输出&quot;basketball,shoes,code&quot;</div><div class="line">console.log(person2.hobbies);//输出&quot;basketball,shoes&quot;</div></pre></td></tr></table></figure>
-<h2 id="5-动态原型模式"><a href="#5-动态原型模式" class="headerlink" title="5.动态原型模式"></a>5.动态原型模式</h2><blockquote>
-<p>这种方法在if处判断了是否初次运行构造函数。初次运行时，this指向的实例对象并没有showInfo这个方法，因此会进入if方法体内进行原型方法的定义。第二次运行时，this指向的实例对象的原型上已经有了showInfo方法，就不会进行二次构造，避免了原型方法的重复定义。除此之外，如果一个方法没有初始化，那代表所有属性和方法都没有初始化，所以只需要对其中一个方法进行判断就好。</p>
-<p>其实一开始也没能发现这种方法比上一种方法的好处，然后查阅发现这是为了解决有其他OO语言开发经验人的困惑，他们对独立开的构造函数和原型感到很困惑，动态原型就可以将所有信息都封装在函数中了。顺便说一句，这种模式产生的对象，可以用instanceof来确定它的类型。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function person(name,age)&#123;</div><div class="line">  this.name=name;</div><div class="line">  this.age= age;</div><div class="line">  if (typeof this.showInfo==&apos;undefined&apos;) &#123;</div><div class="line">    person.prototype.showInfo=function()&#123;</div><div class="line">      return this.name+&apos; is &apos;+this.age;</div><div class="line">    &#125; </div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">var person1 = new person(&apos;wang&apos;,23);</div><div class="line">console.log(person1.showInfo());//wang is 23</div></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>update at 2017.04.09</p>
-<h2 id="6-寄生构造函数"><a href="#6-寄生构造函数" class="headerlink" title="6.寄生构造函数"></a>6.寄生构造函数</h2><p>先不解释这种方法的，先看一个例子。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;   </div><div class="line">    var person = &#123;&#125;;  </div><div class="line">    person.name = name;</div><div class="line">    person.age = age; </div><div class="line">    person.showInfo = function()&#123;  </div><div class="line">        return this.name+&apos; is &apos;+this.age;</div><div class="line">    &#125;;  </div><div class="line">    return person;  </div><div class="line">&#125;   </div><div class="line">var person1 = new createPerson(&quot;wang&quot;,23);  </div><div class="line">console.log(person1.showInfo());//wang is 23</div></pre></td></tr></table></figure>
-<blockquote>
-<p>我自己在学习的时候不够仔细，刚接触这种方法时觉得这不就是工厂函数方法吗？在函数中创建一个新的对象，最后将对象当做返回值，直接看来工厂函数也是这么做的。那么在看一下下一个例子(此例子网上直接拷贝，非原创)。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function SpecialArray()&#123;</div><div class="line">    var values = new Array();</div><div class="line">    values.push.apply(values, arguments);</div><div class="line">    values.toPipedString = function()&#123;</div><div class="line">        return this.join(&quot;|&quot;);</div><div class="line">    &#125;</div><div class="line">    return values;</div><div class="line">&#125;</div><div class="line">var a = new SpecialArray(2,6,8);</div><div class="line">a.toPipedString();//2|6|8</div></pre></td></tr></table></figure>
-<blockquote>
-<p>确实工厂构造方法和寄生构造方法没有本质区别，区别就在实例化的时候，工厂函数直接用了函数返回的对象，而寄生方法用了new关键字。new关键字会先新建一个空对象，这个对象会继承该函数的原型，最后this会绑定到新的对象上。所以这里的toPipedString方法会在原型上，也就是说普通的array也可以用toPipedString方法。总结一下就是寄生构造方法可以js原生的构造函数增加一些新的方法。</p>
-<p>这种方法返回的独享和构造函数或构造函数原型之间没什么关系，构造函数产生的对象和构造函数外部创建的对象没什么不同，也就是说不能通过instanceof来确定其对象类型，基于这一点，个人建议还是不要用这种方法了。</p>
-</blockquote>
-<h2 id="7-稳妥构造函数模式"><a href="#7-稳妥构造函数模式" class="headerlink" title="7.稳妥构造函数模式"></a>7.稳妥构造函数模式</h2><blockquote>
-<p>稳妥对象指的是没有公共属性和方法，看下面的代码可以知道，构造过程中没有引用this，生成实例的时候也没有用new方法，只有showInfo方法可以访问到name和age值，并且无论接下来的代码如何给person1加属性，name和age两个值也是不可能改变的。稳妥构造函数模式提供的这种安全性，使得他非常适合在某些安全的环境（可惜没有实战使用过。。。汗）。<br>其实个人觉得稳妥构造和工厂还是有点像，都是返回一个对象，不过看下面的例子，可以很直观的说明。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">function createPerson(name,age)&#123;  </div><div class="line">    var person = new Object();   </div><div class="line">    person.showInfo = function()&#123;  </div><div class="line">        console.log(name+&apos; is &apos;+age);</div><div class="line">    &#125;;   </div><div class="line">    return person;  </div><div class="line">&#125;   </div><div class="line">var person1 = createPerson(&apos;wangwei&apos;,23);  </div><div class="line">person1.showInfo();  //wangwei is 23</div><div class="line">console.log(person1.name);//undefined </div><div class="line">person1.name = &apos;wangxiaowei&apos;;</div><div class="line">console.log(person1.name);//wangxiaowei</div><div class="line">person1.showInfo();  //wangwei is 23</div><div class="line"></div><div class="line">//---------以上为稳妥构造，下面是工厂函数构造------------</div><div class="line"></div><div class="line">function createPerson(name,age)&#123;</div><div class="line">   var temp=new Object;</div><div class="line">   temp.name=name;</div><div class="line">   temp.age=age;</div><div class="line">   temp.showInfo=function()&#123;</div><div class="line">       console.log(this.name+&apos; is &apos;+this.age); </div><div class="line">   &#125;</div><div class="line">   return temp;//函数最后返回对象</div><div class="line">&#125;</div><div class="line">var person1=createPerson(&apos;wang&apos;,23);</div><div class="line">person1.name=&apos;wangxiaowei&apos;;</div><div class="line">person1.showInfo();//wangxiaowei is 23</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://wangwei0724.github.io/2017/03/06/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Bill Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/icon.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wangwei's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/06/hello-world/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/06/code_interview/" itemprop="url">
                   剑指offer javascript实现
                 </a>
               
@@ -1203,8 +1238,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/06/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/hello-world/" itemprop="commentCount"></span>
+                <a href="/2017/03/06/code_interview/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/code_interview/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1232,46 +1267,30 @@
       
         
           
-            <h2 id="剑指offer-javascript实现"><a href="#剑指offer-javascript实现" class="headerlink" title="剑指offer javascript实现"></a>剑指offer javascript实现</h2><blockquote>
-<p>1.输入一个链表，从尾到头打印链表每个节点的值</p>
-</blockquote>
+            <h2 id="剑指offer-javascript实现"><a href="#剑指offer-javascript实现" class="headerlink" title="剑指offer javascript实现"></a>剑指offer javascript实现</h2><p>1.输入一个链表，从尾到头打印链表每个节点的值</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function printListFromTailToHead(head)&#123;</div><div class="line">    var node= head;</div><div class="line">    var list=[];</div><div class="line">    while(node!=null)&#123;</div><div class="line">        list.unshift(node.val);</div><div class="line">        node=node.next;</div><div class="line">    &#125;</div><div class="line">    return list;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    printListFromTailToHead : printListFromTailToHead</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>2.请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function replaceSpace(str)&#123;</div><div class="line">    var arr = str.split(&apos; &apos;);</div><div class="line">    str = arr.join(&apos;%20&apos;);</div><div class="line">    return str;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    replaceSpace : replaceSpace</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>3.用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">var stack = [];</div><div class="line">var stack_temp = [];</div><div class="line">function push(node)</div><div class="line">&#123;</div><div class="line">    stack.push(node);</div><div class="line">&#125;</div><div class="line">function pop()</div><div class="line">&#123;   </div><div class="line">    if(stack_temp.length==0)&#123;//若不为空直接返回之前一步最后压入的元素即可</div><div class="line">        while(stack.length&gt;0)&#123;</div><div class="line">            stack_temp.push(stack.pop());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return stack_temp.pop();</div><div class="line"></div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    push : push,</div><div class="line">    pop : pop</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>4.把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。<br>输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。<br>例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。<br>NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//方法1:这是比较low的解决方法，直接遍历数组，通过前后元素的大小比较确定</div><div class="line">function minNumberInRotateArray(rotateArray)&#123;</div><div class="line">    if(rotateArray.length==0)&#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    for(var i=0;i&lt;rotateArray.length;i++)&#123;</div><div class="line">        if(rotateArray[i+1]&lt;rotateArray[i])&#123;</div><div class="line">            return rotateArray[i+1];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    minNumberInRotateArray : minNumberInRotateArray</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">//方法2效率较高，避免了一个一个比较</div><div class="line">function minNumberInRotateArray(rotateArray)</div><div class="line">&#123;</div><div class="line">    if(rotateArray.length==0)&#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">	var start= 0;</div><div class="line">    var end = rotateArray.length-1;</div><div class="line">    var middle = 0;</div><div class="line">    while(rotateArray[start]&gt;=rotateArray[end])&#123;</div><div class="line">    	if(start==end-1)&#123;</div><div class="line">            middle = end;</div><div class="line">    		break;</div><div class="line">    	&#125;</div><div class="line">    	middle=Math.floor((start+end)/2);</div><div class="line">        if(rotateArray[middle]&gt;=rotateArray[start])&#123;</div><div class="line">            start=middle;</div><div class="line">        &#125;</div><div class="line">        else if(rotateArray[middle]&lt;rotateArray[start])&#123;</div><div class="line">            end=middle;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    return rotateArray[middle];</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    minNumberInRotateArray : minNumberInRotateArray</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>5.大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。</p>
-<p>tip:这道题其实可以用递归，代码或许会更简洁，但是递归在这里有严重的效率问题，比如说求f(10),必须先求f(8)和f(9)，f(9)又要计算f(7)和f(8)，可以发现f(8)被重复计算。</p>
-</blockquote>
+<p>解题思路:这道题其实可以用递归，代码或许会更简洁，但是递归在这里有严重的效率问题，比如说求f(10),必须先求f(8)和f(9)，f(9)又要计算f(7)和f(8)，可以发现f(8)被重复计算。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function Fibonacci(n)&#123;</div><div class="line">    var sum=0;</div><div class="line">    var first=1;</div><div class="line">    var second=1;</div><div class="line">    if(n==1||n==2)&#123;</div><div class="line">        sum = 1;</div><div class="line">    &#125;else&#123;</div><div class="line">        var i=3;</div><div class="line">        while(i&lt;=n)&#123;</div><div class="line">            sum = first+second;</div><div class="line">            first = second;</div><div class="line">            second = sum;</div><div class="line">            i++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return sum;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    Fibonacci : Fibonacci</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>6.一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。</p>
 <p>解题思路：青蛙最后一步可以跳一级或者两级;那么假定第一次跳的是一阶，那么剩下的是n-1个台阶，跳法是f(n-1);假定第一次跳的是2阶，那么剩下的是n-2个台阶，跳法是f(n-2);所以最后一步的跳法f(n)=f(n-1)+f(n-2)</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">function jumpFloor(number)&#123;</div><div class="line">    if(number==0)&#123;</div><div class="line">    	return 0;</div><div class="line">    &#125;else if(number&gt;0&amp;&amp;number&lt;3)&#123;</div><div class="line">    	return number;</div><div class="line">    &#125;else&#123;</div><div class="line">    	var first =1;</div><div class="line">    	var second = 2;</div><div class="line">    	var sum;</div><div class="line">        var i=3;</div><div class="line">    	while(i&lt;=number)&#123;</div><div class="line">    		sum = first+second;</div><div class="line">    		first = second;</div><div class="line">    		second = sum;</div><div class="line">            i++</div><div class="line">    	&#125;</div><div class="line">    	return &gt;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    jumpFloor : jumpFloor</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <blockquote>
 <p>7.一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法</p>
 <p>解题思路：若将n级台阶的跳法设为f(n)，可以想到f(n)=f(n-1)+f(n-2)+f(n-3)….+f(1)，而f(n-1)=f(n-2)+f(n-3)….+f(1)，所以f(n)=2f(n-1)。所以代码思路就很清晰了</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function jumpFloorII(number)&#123;</div><div class="line">    if(number == 0)&#123;//特殊情况单独拿出来讨论一下</div><div class="line">        return 0;</div><div class="line">    &#125;else&#123;</div><div class="line">       return Math.pow(2, number-1) </div><div class="line">    &#125;   </div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    jumpFloorII : jumpFloorII</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>8.我们可以用2 <code><em></em></code> 1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2 <code></code> 1的小矩形无重叠地覆盖一个2 <code>*</code> n的大矩形，总共有多少种方法？</p>
 <p>解题思路：这和上面一样也是一道斐波那契数列的题目，具体思路和第一个青蛙跳台阶差不多</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function rectCover(number)&#123;</div><div class="line">	if(number==2||number==1||number==0)&#123;</div><div class="line">		return number;</div><div class="line">	&#125;else&#123;</div><div class="line">		var sum;</div><div class="line">		var first= 1;</div><div class="line">		var second = 2;</div><div class="line">		var i=3;</div><div class="line">		while(i&lt;=number)&#123;</div><div class="line">			sum = first+second;</div><div class="line">			first = second;</div><div class="line">			second = sum;</div><div class="line">			i++;</div><div class="line">		&#125;</div><div class="line">		return sum;</div><div class="line">	&#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    rectCover : rectCover</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>9.输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function reOrderArray(array)&#123;</div><div class="line">    var first=[];//按顺序存奇数</div><div class="line">    var second=[];</div><div class="line">    for(var i=0;i&lt;array.length;i++)&#123;</div><div class="line">        if((array[i]%2)==0)&#123;</div><div class="line">            second.push(array[i]);</div><div class="line">        &#125;else&#123;</div><div class="line">            first.push(array[i]);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    first=first.concat(second);</div><div class="line">    return first;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    reOrderArray : reOrderArray</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 
           
@@ -1360,7 +1379,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

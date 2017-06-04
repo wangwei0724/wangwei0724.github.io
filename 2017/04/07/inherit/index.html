@@ -88,21 +88,18 @@
 
 
 <meta name="description" content="javascript 继承继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。
-1.原型链方法
-原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指">
+1.原型链方法原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针">
 <meta property="og:type" content="article">
 <meta property="og:title" content="javascript继承方法">
 <meta property="og:url" content="https://wangwei0724.github.io/2017/04/07/inherit/index.html">
 <meta property="og:site_name" content="Wangwei's Blog">
 <meta property="og:description" content="javascript 继承继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。
-1.原型链方法
-原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指">
-<meta property="og:updated_time" content="2017-04-29T11:10:16.000Z">
+1.原型链方法原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针">
+<meta property="og:updated_time" content="2017-06-04T08:01:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="javascript继承方法">
 <meta name="twitter:description" content="javascript 继承继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。
-1.原型链方法
-原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指">
+1.原型链方法原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针">
 
 
 
@@ -424,69 +421,37 @@
 
       
         <h1 id="javascript-继承"><a href="#javascript-继承" class="headerlink" title="javascript 继承"></a>javascript 继承</h1><p>继承是很多面向对象语言中让人津津乐道的概念，ECMAScript中的继承主要是靠原型链来实现。</p>
-<h2 id="1-原型链方法"><a href="#1-原型链方法" class="headerlink" title="1.原型链方法"></a>1.原型链方法</h2><blockquote>
-<p>原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。所以如果让原型对象等于另一个类型的实例，此时的原型对象就会包含一个指向另一个原型的指针，另一个原型中也包含着一个指向另一个构造函数的指针。如此层层推进，就构成了实例和原型之间的链条。下面提供一个原型链继承的例子。</p>
-</blockquote>
+<h2 id="1-原型链方法"><a href="#1-原型链方法" class="headerlink" title="1.原型链方法"></a>1.原型链方法</h2><p>原型链实现继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法（其实个人认为继承还是主要以方法为主）。简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象中包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。所以如果让原型对象等于另一个类型的实例，此时的原型对象就会包含一个指向另一个原型的指针，另一个原型中也包含着一个指向另一个构造函数的指针。如此层层推进，就构成了实例和原型之间的链条。下面提供一个原型链继承的例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function SuperType()&#123;</div><div class="line">  this.property = true;</div><div class="line">&#125;</div><div class="line">SuperType.prototype.getValue=function()&#123;</div><div class="line">  return this.property;</div><div class="line">&#125;</div><div class="line">function SubType()&#123;</div><div class="line">  this.subProperty = true;</div><div class="line">&#125;</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">SuperType.prototype.getSubValue=function()&#123;</div><div class="line">  return this.subProperty;</div><div class="line">&#125;</div><div class="line">var instance = new SubType();</div><div class="line">console.log(instance.getValue());//true</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上面代码其实定义了两个类型：SuperType和SubType，每个类型都属于自己的一个属性和方法。主要在于SubType继承了SuperType，继承的方法是通过创建SuperType的实例并将实例赋给了SubType.prototype，本质上是重写了原型对象。所以结果就是instance指向SubType的原型，SubType又指向了SuperType的原型。getValue方法仍然在SuperType.prototype中，但是property则位于SubType.prototype中。这是因为property是一个实例属性，而getValue是一个原型方法。不过在这里要注意instance.constructer现在是指向SuperType，这是因为SubType.prototype中的constructer被重写了。</p>
 <p>使用原型链方法其实有一个小的注意点，我们在创建原型方法时不能使用对象字面量，因为这种方法会重写原型链,如下例：</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function SuperType()&#123;</div><div class="line">  this.property = true;</div><div class="line">&#125;</div><div class="line">SuperType.prototype.getValue=function()&#123;</div><div class="line">  return this.property;</div><div class="line">&#125;</div><div class="line">function SubType()&#123;</div><div class="line">  this.subProperty = true;</div><div class="line">&#125;</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">SuperType.prototype=&#123;</div><div class="line">  getSubValue:function()&#123;</div><div class="line">     return this.subProperty;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">var instance = new SubType();</div><div class="line">console.log(instance.getValue());//error</div></pre></td></tr></table></figure>
-<blockquote>
 <p>除此之外，原型链继承也还是有一些问题的，最主要的是包含引用类型值的原型，如下例：</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function Super()&#123;</div><div class="line">    this.val = 1;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">function Sub()&#123;</div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line">Sub.prototype = new Super();    var sub1 = new Sub();</div><div class="line">var sub2 = new Sub();</div><div class="line">sub1.val = 2;</div><div class="line">sub1.arr.push(2);</div><div class="line">alert(sub1.val);    // 2</div><div class="line">alert(sub2.val);    // 1</div><div class="line"></div><div class="line">alert(sub1.arr);    // 1, 2</div><div class="line">alert(sub2.arr);    // 1, 2</div></pre></td></tr></table></figure>
-<blockquote>
 <p>原型链的第二个问题就是在创建子类的实例时，不能向超类型的构造函数中传递参数。其实按照我的理解应该说是无法再不影响实例对象的情况下，给超类型的构造函数传递参数，所以平时我一般不考虑用这种方法。</p>
-</blockquote>
-<h2 id="2-借用构造函数"><a href="#2-借用构造函数" class="headerlink" title="2.借用构造函数"></a>2.借用构造函数</h2><blockquote>
-<p>这种方法的思想很简单，就是直接在子类构造函数的内部调用超类构造函数，用call或者apply来改变this的指向，其实就是在我们未来要新创建的Sub实例的环境下调用Super的方法，如下例：</p>
-</blockquote>
+<h2 id="2-借用构造函数"><a href="#2-借用构造函数" class="headerlink" title="2.借用构造函数"></a>2.借用构造函数</h2><p>这种方法的思想很简单，就是直接在子类构造函数的内部调用超类构造函数，用call或者apply来改变this的指向，其实就是在我们未来要新创建的Sub实例的环境下调用Super的方法，如下例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line"></div><div class="line">    this.fun = function()&#123;</div><div class="line">        // ...</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function Sub(val)&#123;</div><div class="line">    Super.call(this, val);</div><div class="line">    this.name = &apos;sub&apos;;      </div><div class="line">&#125;</div><div class="line">var sub1 = new Sub(1);</div><div class="line">var sub2 = new Sub(2);</div><div class="line">sub1.arr.push(2);</div><div class="line">console.log(sub1.val);    // 1</div><div class="line">console.log(sub2.val);    // 2</div><div class="line">console.log(sub2.name);    // sub</div><div class="line">console.log(sub1.arr);    // 1, 2</div><div class="line">console.log(sub2.arr);    // 1</div><div class="line">console.log(sub1.fun === sub2.fun);   // false</div></pre></td></tr></table></figure>
-<blockquote>
 <p>从上面的例子可以看出来，借用构造函数是可以向超类构造函数中传递参数的，如例子中的name属性。为了确保Super构造函数不会重写子类的属性，可以在调用超类构造函数后，再添加相应的子类。</p>
 <p>借用构造函数也是有一定问题的，所有的方法都是在构造函数中定义，函数复用就无从谈起了。而且超类原型中定义的方法对子类是不可见的，结果所有的类型就只能使用构造函数模式了，所以平时我也是很少用这个方法。</p>
-</blockquote>
-<h2 id="3-组合继承"><a href="#3-组合继承" class="headerlink" title="3.组合继承"></a>3.组合继承</h2><blockquote>
-<p>组合继承指的是将原型链和借用构造函数组合到一起的一种继承模式，主要思路就是使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承。这样既通过在原型上定义方法实现了函数复用，又能保证每个实例都有自己的属性。</p>
-</blockquote>
+<h2 id="3-组合继承"><a href="#3-组合继承" class="headerlink" title="3.组合继承"></a>3.组合继承</h2><p>组合继承指的是将原型链和借用构造函数组合到一起的一种继承模式，主要思路就是使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承。这样既通过在原型上定义方法实现了函数复用，又能保证每个实例都有自己的属性。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    // 只在此处声明基本属性和引用属性</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">//  在此处声明函数，把实例函数都放在原型对象上，以实现函数复用</div><div class="line">Super.prototype.fun = function()&#123;&#125;;</div><div class="line">//Super.prototype.fun3...</div><div class="line">function Sub(val,name)&#123;</div><div class="line">    Super.call(this,val); </div><div class="line">    this.name = name; </div><div class="line">&#125;</div><div class="line">Sub.prototype.sayName = function()&#123;</div><div class="line">	 console.log(this.name);</div><div class="line">&#125;</div><div class="line">Sub.prototype = new Super(); </div><div class="line"></div><div class="line">var sub1 = new Sub(1);</div><div class="line">var sub2 = new Sub(2);</div><div class="line">alert(sub1.fun === sub2.fun);   // true</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上面的例子中，Super构造函数有arr和value两个属性，原型上有fun这个方法。Sub构造函数在调用Super构造函数时传入了val参数，然后有定义了属于自己的name属性。最后将Super的实例赋给Sub的原型，然后在该新原型上定义了sayName方法。这样一来可以让两个不同的Sub实例既拥有属于自己的属性，又可以使用相同的方法。</p>
 <p>但是这种方法也不是完全没有缺点的，可以看出在这个过程中超类使用了两次，一次在创建子类原型的时候，另一次是在子类构造函数内部，但是使用过程中，子类的实例属性会屏蔽原型属性，也就是说某些原型属性其实是用不上的，这造成了内存的浪费。</p>
-</blockquote>
-<h2 id="4-原型式继承"><a href="#4-原型式继承" class="headerlink" title="4.原型式继承"></a>4.原型式继承</h2><blockquote>
-<p>这种方法其实没有严格意义上的构造函数，主体思想是基于已有的对象并借助原型构建新的对象。</p>
-</blockquote>
+<h2 id="4-原型式继承"><a href="#4-原型式继承" class="headerlink" title="4.原型式继承"></a>4.原型式继承</h2><p>这种方法其实没有严格意义上的构造函数，主体思想是基于已有的对象并借助原型构建新的对象。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function inherit(obj)&#123;</div><div class="line">  function temp()&#123;&#125;;</div><div class="line">  temp.prototype = obj;</div><div class="line">  return new temp;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>参照上述主题思想，在inherit函数内部先创建一个临时的构造函数，然后将传入的对象作为这个构造函数的原型，最后返回这个临时原型的新实例。本质上讲，这就是对传入对象进行了一次浅复制。这种方法一开始是一个叫克劳克福德的老外提出来的，现在es5中有Object.create()方法，这个方法接收两个参数，一个用作新对象原型的对象，一个为新对象增加额外属性属性的对象。在只传入一个参数的情况下，上述inherit方法和Object.create()方法效果一样。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var person = &#123;</div><div class="line">  name:&apos;wang&apos;,</div><div class="line">  hobbies:[&apos;shoes&apos;,&apos;ballgames&apos;]</div><div class="line">&#125;;</div><div class="line">var person1 = Object.create(person);</div><div class="line">person1.hobbies.push(&apos;code&apos;);</div><div class="line">console.log(person.hobbies);//&apos;shoes&apos;,&apos;ballgames&apos;,&apos;code&apos;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>包含引用类型值的属性始终会共享相应的值，就像原型模式一样。如果不想构建创造函数，只是想让一个对象和另一个对象保持类似的情况下，可以考虑使用原型书继承，别的情况下不建议使用。</p>
-</blockquote>
 <hr>
 <p>update at 2017.04.15</p>
-<h2 id="5-寄生式继承"><a href="#5-寄生式继承" class="headerlink" title="5.寄生式继承"></a>5.寄生式继承</h2><blockquote>
-<p>这种方法的思路和寄生构造函数和工厂模式类似，就是创建一个仅用于封装继承过程的函数，该函数的内部以别的方法来增强对象，最后再返回对象。</p>
-</blockquote>
+<h2 id="5-寄生式继承"><a href="#5-寄生式继承" class="headerlink" title="5.寄生式继承"></a>5.寄生式继承</h2><p>这种方法的思路和寄生构造函数和工厂模式类似，就是创建一个仅用于封装继承过程的函数，该函数的内部以别的方法来增强对象，最后再返回对象。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function createAnother(original)&#123;</div><div class="line">  var clone = Object.create(original);</div><div class="line">  clone.show = function()&#123;</div><div class="line">     //</div><div class="line">  &#125;</div><div class="line">  return clone;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上述例子中，接收的参宿就是将要作为新对象基础的对象，最后再给clone对象增加新的方法。新的对象不仅有original所有的属性和方法，还有自己的show方法。使用这种继承方法给对象添加函数，会由于不能做到函数复用而降低效率。</p>
-</blockquote>
-<h2 id="6-寄生组合式继承"><a href="#6-寄生组合式继承" class="headerlink" title="6.寄生组合式继承"></a>6.寄生组合式继承</h2><blockquote>
-<p>之前说过组合继承中超类使用了两次从而造成内存浪费，浪费的原因主要是在原型和实例中都会出现重名的属性。寄生组合式继承是通过借用构造函数来继承属性，通过原型链的混成形式来继承方法；基本思路就是不必为了指定子类型的原型而调用超类的构造函数，我们所需要的其实就是一个超类型的副本。简单说就是使用寄生式来继承超类的原型，再将结果给子类的原型。</p>
-</blockquote>
+<h2 id="6-寄生组合式继承"><a href="#6-寄生组合式继承" class="headerlink" title="6.寄生组合式继承"></a>6.寄生组合式继承</h2><p>之前说过组合继承中超类使用了两次从而造成内存浪费，浪费的原因主要是在原型和实例中都会出现重名的属性。寄生组合式继承是通过借用构造函数来继承属性，通过原型链的混成形式来继承方法；基本思路就是不必为了指定子类型的原型而调用超类的构造函数，我们所需要的其实就是一个超类型的副本。简单说就是使用寄生式来继承超类的原型，再将结果给子类的原型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function inheritPrototype(Sub,Super)&#123;</div><div class="line">  var prototype = Object.create(Super.prototype);//创建对象</div><div class="line">  prototype.constructor = Sub;//增强对象</div><div class="line">  Sub.prototype = prototype;//指定对象</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
 <p>上述函数接收两个参数，分别为子类构造函数和超类构造函数。函数内部第一步常见超类原型的一个副本，第二步为创建的副本添加constructer属性，弥补一下因为重写原型而失去的默认的constructer属性，第三部将新创建的对象赋给子类的原型。</p>
-</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">function Super(val)&#123;</div><div class="line">    this.val = val;</div><div class="line">    this.arr = [1];</div><div class="line">&#125;</div><div class="line">Super.prototype.fun = function()&#123;</div><div class="line">	 alert(this.val);</div><div class="line">&#125;;</div><div class="line">function Sub(val,name)&#123;</div><div class="line">    Super.call(this，val); </div><div class="line">    this.name = name; </div><div class="line">&#125;</div><div class="line">inheritPrototype(Sub,Super);</div><div class="line">Sub.prototype.sayName = function()&#123;</div><div class="line">	 console.log(this.name);</div><div class="line">&#125;</div><div class="line"></div><div class="line">var sub1 = new Sub(1,&apos;wang&apos;);</div><div class="line">var sub2 = new Sub(2,&apos;wei&apos;);</div><div class="line">alert(sub1.fun === sub2.fun);   // true</div><div class="line">sub1.sayName();//wang</div><div class="line">sub1.arr.push(111);</div><div class="line">console.log(sub1.arr);//[1,111]</div><div class="line">console.log(sub2.arr);//[1]</div></pre></td></tr></table></figure>
-<blockquote>
 <p>相对于组合继承，这个方法最大的优势就在于他只调用了一席Super构造函数，因此避免了在Sub.prototype上创建不必要的属性，与系统是，原型链还能保持不变，简直完美！！！</p>
-</blockquote>
 
       
     </div>
@@ -517,8 +482,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/05/new-page/" rel="next" title="腾讯笔试后知后觉">
-                <i class="fa fa-chevron-left"></i> 腾讯笔试后知后觉
+              <a href="/2017/03/06/code_interview/" rel="next" title="剑指offer javascript实现">
+                <i class="fa fa-chevron-left"></i> 剑指offer javascript实现
               </a>
             
           </div>
@@ -527,8 +492,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/28/learning/" rel="prev" title="learning">
-                learning <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/28/bfc/" rel="prev" title="BFC引发的思考">
+                BFC引发的思考 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -616,7 +581,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
